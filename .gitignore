@@ -1,2 +1,3 @@
 # Vagrant Files
 *.vagrant/*
+.vagrant/
