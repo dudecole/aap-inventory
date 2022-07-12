@@ -1,0 +1,26 @@
+---
+- name: loop through a number of times to create some dummy directories
+  file:
+    state: directory
+    path: "{{ nfs_shared_volume }}/loop-dir-{{ item }}"
+    force: yes 
+  with_sequence: count=5
+  register: dir_results
+
+#- name: debug the directory results
+#  debug:
+#    msg: "{{ dir_results }}"
+
+- name: loop through a number of times to create some dummy directories
+  file:
+    state: touch
+    path: "{{ nfs_shared_volume }}/loop-dir-{{ item }}/loop-file-{{ item }}"
+    force: yes 
+  with_sequence: count=5
+  register: file_results
+
+#- name: debug the file results
+#  debug:
+#    msg: "{{ file_results }}"
+
+#nfs_shared_volume: "/ansible"

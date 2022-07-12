@@ -1,0 +1,22 @@
+---
+# assert the NFS server address and mount is defined
+- name: Assert variables are defined
+  assert:
+    that: 
+      - nfs_server_address is defined
+      - nfs_mount_opts is defined
+      - mount_state is defined
+      - mount_type is defined 
+    fail_msg: "sorry missing 'mount_args' or 'nfs_server_path'"
+    success_msg: "lets get it!" 
+
+- name: Mount an NFS volume - THIS WORKS
+  ansible.posix.mount:
+    src: "{{ nfs_export_path }}" #192.168.56.12:/mnt/nfs_shares/docs
+    path: "{{ nfs_shared_volume }}" #/ansible
+    opts: "{{ nfs_mount_opts }}" #rw,sync,hard
+    state: "{{ mount_state }}" #mounted
+    boot: yes
+    fstype: "{{ mount_type }}" #nfs
+  register: mount_results
+

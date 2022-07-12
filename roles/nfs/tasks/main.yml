@@ -1,0 +1,19 @@
+#<TODO: create/include_tasks for nfs_packages checks>
+---
+- name: Assert some variables are defined
+  assert:
+    that:
+      - nfs_packages is defined
+    fail_msg: '"nfs_packages" is not defined'
+    success_msg: 'variables are ready to go'
+
+# Install NFS packs on EE nodes
+- name: yum install NFS client and reqs
+  dnf:
+    name: "{{ nfs_packages }}"
+    state: present
+  register: yum_results
+
+# import task to mount nfs volume to the EE node(s)
+- name: include task for running mount command
+  include_tasks: mount-nfs.yml

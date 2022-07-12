@@ -1,0 +1,24 @@
+# TODO:
+# - Update documentation
+# - validate the fileshare permissions from the mounted volume in the 
+#   EE Node OS.  Seems the 'awx' user needs 'rwx' perms to that newly
+#   mounted volume/folder...  Double check this..
+
+- name: Prepare NFS Connection for Execution Environment Nodes 
+  hosts: all
+  gather_facts: no
+
+  collections: 
+    - ansible.posix.mount
+    - awx.awx
+
+  tasks:
+    - name: include role for preparing EE nodes
+      include_role:
+        name: nfs
+
+    - name: include role for creating dummy files/directories 
+      include_role:
+        name: nfs
+        tasks_from: file-create.yml 
+

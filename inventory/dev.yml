@@ -1,0 +1,21 @@
+all:
+  children:
+    
+    execution_nodes:
+      hosts:
+        192.168.56.12: {}
+          #        192.168.56.13: {}
+          #        192.168.59.111: {}
+      vars:
+        node_type: execution
+        # seems running locally has issues without this, can specify on CLI but meh..
+        ansible_user: root
+    
+    ungrouped:
+      hosts:
+        127.0.0.1: 
+          ansible_connection: local
+
+# [all] group vars
+  vars:
+    ansible_user: 'root'
