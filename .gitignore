@@ -1,3 +1,6 @@
 # Vagrant Files
 *.vagrant/*
 .vagrant/
+
+# Vault file
+*vault*
