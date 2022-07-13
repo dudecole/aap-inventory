@@ -41,6 +41,7 @@ sudo EXTERNAL_URL="http://192.168.56.11" yum install -y gitlab-ee
 ## query the password at:
 cp /etc/gitlab/initial_root_password ~/gitlab-root-password.txt
 
+
 systemctl status firewalld
 systemctl disable firewalld
 systemctl stop firewalld
@@ -80,6 +81,10 @@ chown -R ansible-admin:ansible-admin /home/ansible-admin/.ssh
 # SELinux
 setenforce 0
 
+# Install gitlab runner
+curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+
+# Adjust sshd
 sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication no/#PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config

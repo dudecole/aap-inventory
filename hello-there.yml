@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+
+  tasks:
+  - name: Print HI THERE
+    debug:
+      msg: "HI THERE.."
