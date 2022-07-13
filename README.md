@@ -1,6 +1,19 @@
-# 
+# Global Inventory Repo .<.PLEASE UPDATE ME... ;)>
 
-# NFS Mounting via Execution Node and Execution Environment
+## Purpose
+
+The purpose of this repository was to create
+a home location for an Inventory that Ansible Automation PLatform
+can use when building inventories, and when installing the AAP platform.
+
+I supposed this can also be expanded for all inventories.  If this 
+expands into a global inventory repository, then some structure will
+need TBD.. 
+
+## TOC
+- Playbooks
+  - NFS Mounting via Execution Node and Execution Environment
+  - 
 
 ## Execution Node
 
