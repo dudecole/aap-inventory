@@ -1,3 +1,10 @@
+# <TODO-
+# - cleanup this mess...
+#
+# >
+# This was originally intended to be a wrapper
+# for the `setup.sh` located with the AAP 
+# download/bundle pack.  Still not complete...
 ---
 - hosts: all
 
