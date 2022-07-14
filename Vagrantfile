@@ -192,17 +192,16 @@ Vagrant.configure("2") do |config|
     end
   end
 
-#  config.vm.define "execnode2" do |execnode2|
-#    execnode2.vm.box = "bento/centos-8.2"
-#    execnode2.vm.hostname = "execnode2"
-#    execnode2.vm.provision "shell", inline: $controller_config
-#    execnode2.vm.network "private_network" , ip: "192.168.56.12" 
-#    execnode2.vm.synced_folder '.', '/vagrant', disabled: true
-#    config.vm.provider "virtualbox" do |execnodem2|
-#        execnodem2.memory = 4096
-#        execnodem2.cpus = 2
-#    end
-#  end
+  config.vm.define "execnode2" do |execnode2|
+    execnode2.vm.box = "generic/rhel8"
+    execnode2.vm.hostname = "execnode2"
+    execnode2.vm.provision "shell", inline: $controller_config
+    execnode2.vm.network "private_network" , ip: "192.168.56.12" 
+    config.vm.provider "virtualbox" do |execnodem2|
+        execnodem2.memory = 4096
+        execnodem2.cpus = 2
+    end
+  end
 
 #  config.vm.define "execnode3" do |execnode3|
 #    execnode3.vm.box = "generic/rhel8"
