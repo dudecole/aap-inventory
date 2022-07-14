@@ -9,7 +9,7 @@
   tasks:
   - name: copy inventory file to shared volume
     copy:
-      src: "{{ inventory }}"
+      src: "{{ inv_file }}"
       dest: "{{ base_path }}/{{ inv_file }}"
       mode: 0755
       owner: nobody
