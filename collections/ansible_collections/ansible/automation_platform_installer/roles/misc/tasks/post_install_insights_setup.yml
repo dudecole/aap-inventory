@@ -1,9 +1,0 @@
----
-- name: Ensure insights-client is installed
-  dnf:
-    name: insights-client
-    state: present
-
-- name: Register with Insights
-  command: insights-client --register
-  ignore_errors: true

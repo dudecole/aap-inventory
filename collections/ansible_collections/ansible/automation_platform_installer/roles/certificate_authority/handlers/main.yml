@@ -1,4 +1,0 @@
----
-# Handlers for common notifications.
-- name: Update CA trust
-  command: update-ca-trust

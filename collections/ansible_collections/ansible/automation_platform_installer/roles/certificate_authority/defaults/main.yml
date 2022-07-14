@@ -1,8 +1,0 @@
----
-# defaults file for certificate_authority
-aap_ca_regenerate: 'false'
-aap_ca_passphrase_cipher: 'aes256'
-
-aap_service_regen_cert: 'false'
-aap_service_cert_extension: 'crt'
-aap_service_hostname: '{{ routable_hostname | default(ansible_host) }}'

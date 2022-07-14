@@ -1,8 +1,0 @@
-/var/log/supervisor/*.log {
-  compress
-  missingok
-  notifempty
-  daily
-  rotate 14
-  copytruncate
-}

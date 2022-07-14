@@ -1,3 +1,0 @@
----
-default_runtime: crun
-podman_force_selinux_relabel: false

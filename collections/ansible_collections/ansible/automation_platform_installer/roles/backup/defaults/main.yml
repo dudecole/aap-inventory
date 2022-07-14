@@ -1,6 +1,0 @@
----
-backup_dir: /var/backups/automation-platform/
-backup_dest: '{{ setup_dir }}'
-backup_file_prefix: automation-platform-backup
-use_compression: False
-db_filename: tower.db
