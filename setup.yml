@@ -4,12 +4,23 @@
   vars:
     setup_path: /ansible/aap-setup/setup.sh
     base_path: /ansible/aap-setup
-    inv_file: inventory
+    inv_file: inventory.bak
 
   tasks:
-  - name: copy inventory file to shared volume
+  - name: ok what directory am I in.
+    shell:
+      cmd: |
+        ls -al /ansible
+    register: results
+      #    delegate_to: 192.168.59.10
+
+  - name: debug command_results
+    debug:
+      msg: "{{ results }}"
+
+  - name: copy setup contents shared volume
     copy:
-      src: "{{ inv_file }}"
+      src: inventory
       dest: "{{ base_path }}/{{ inv_file }}"
       mode: 0755
       owner: nobody
