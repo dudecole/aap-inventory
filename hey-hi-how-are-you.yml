@@ -1,0 +1,12 @@
+---
+- name: playbook to use as a test/placeholder
+  hosts: localhost
+  connection: local
+
+  vars:
+    my_message: "hmmm... yep we got it.."
+
+  tasks: 
+  - name: Print out the my_message variable
+    debug:
+      msg: "{{ my_message }}"
