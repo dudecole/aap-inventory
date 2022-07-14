@@ -2,7 +2,7 @@
 - hosts: 192.168.59.10
   connection: local
 
-  vars_file:
+  vars_files:
     - inventory.yml
 
   tasks:
