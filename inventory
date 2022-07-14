@@ -12,14 +12,11 @@ peers=execution_nodes
 [automationhub]
 192.168.59.50
 
-#[control_nodes]
-#192.168.59.10
-#192.168.59.11
 [nfs]
 192.168.56.11
 
 [ldap]
-192.168.56.200
+#192.168.56.200
 
 [all]
 #localhost ansible_connection=local 
