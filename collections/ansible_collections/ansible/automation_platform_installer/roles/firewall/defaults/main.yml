@@ -1,0 +1,20 @@
+component_firewall_type: none
+
+controller_firewall_ports:
+  - "{{ firewalld_http_port }}"
+  - "{{ firewalld_https_port }}"
+
+automationcatalog_firewall_ports:
+  - "{{ _automationcatalog_http_port }}"
+  - "{{ _automationcatalog_https_port }}"
+
+database_firewall_ports:
+  - "{{ pg_port }}"
+
+controller_firewalld_zone: public
+automationcatalog_firewalld_zone: public
+
+receptor_listener_port: 27199
+receptor_listener_protocol: tcp
+receptor_firewall_ports:
+  - "{{ receptor_listener_port }}"

@@ -1,0 +1,213 @@
+---
+- name: Set the application and token name
+  set_fact:
+    automationcatalog_controller_app_name: "Services Catalog - {{ automationcatalog_controller_username }}"
+
+- name: Retrieve install uuid
+  uri:
+    url: '{{ automation_controller_main_url }}/api/v2/ping'
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+  register: _install_info
+  no_log: true
+
+- name: Retrieve User Info
+  uri:
+    url: '{{ automation_controller_main_url }}/api/v2/me'
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+  register: _user_info
+  no_log: true
+
+- name: Retrieve User Organization Info
+  uri:
+    url: '{{ automation_controller_main_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/organizations'
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    force_basic_auth: true
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+  register: _org_info
+  no_log: true
+
+# Only superusers are created without org membership
+# There is no longer a Default organization
+- name: Set org id when user is not admin
+  set_fact:
+    _org_id: '{{ _org_info.json.results[0].id }}'
+  when: _org_info.json.results | length
+
+- block:
+
+    - name: 'Check if org exists - {{ automationcatalog_controller_app_name }}'
+      uri:
+        url: '{{ automation_controller_main_url }}/api/v2/organizations/?name={{ automationcatalog_controller_app_name | urlencode }}&description={{ automationcatalog_controller_app_name | urlencode }}'
+        user: '{{ automationcatalog_controller_username }}'
+        password: '{{ automationcatalog_controller_password }}'
+        force_basic_auth: true
+        validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+      no_log: true
+      register: _aap_org_check
+
+    - name: Create Automation Platform organization
+      uri:
+        url: '{{ automation_controller_main_url }}/api/v2/organizations/'
+        user: '{{ automationcatalog_controller_username }}'
+        password: '{{ automationcatalog_controller_password }}'
+        method: POST
+        force_basic_auth: true
+        body_format: json
+        body:
+          name: '{{ automationcatalog_controller_app_name }}'
+          description: '{{ automationcatalog_controller_app_name }}'
+        validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+        status_code: [201,400]
+      register: _aap_org_info
+      changed_when: _aap_org_info.status | int == 201
+      no_log: true
+      when: not _aap_org_check.json.results | length
+
+    - name: Set org id to new Automation Platform organization
+      set_fact:
+        _org_id: '{{ _aap_org_info.json.id }}'
+      when: not _aap_org_check.json.results | length
+
+    - name: Set org id to existing Automation Platform organization
+      set_fact:
+        _org_id: '{{ _aap_org_check.json.results[0].id }}'
+      when: _aap_org_check.json.results | length
+
+  when: not _org_info.json.results | length
+
+- name: Store the install and organisation uuid value
+  set_fact:
+    _servicescatalog_controller_uuid: '{{ _install_info.json.install_uuid + _org_id | to_uuid }}'
+
+- name: Retrieve application
+  uri:
+    url: '{{ automation_controller_main_url }}/api/v2/applications/?name={{ automationcatalog_controller_app_name | urlencode }}&description={{ automationcatalog_controller_app_name | urlencode }}'
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    force_basic_auth: true
+    follow_redirects: true
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+  register: _application_info
+  no_log: true
+
+- name: Generate application (if not created)
+  uri:
+    url: '{{ automation_controller_main_url }}/api/v2/applications/'
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    method: POST
+    force_basic_auth: true
+    follow_redirects: true
+    body_format: json
+    body:
+      name: '{{ automationcatalog_controller_app_name }}'
+      description: '{{ automationcatalog_controller_app_name }}'
+      client_type: confidential
+      authorization_grant_type: password
+      organization: '{{ _org_id | int }}'
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+    status_code: [201,400]
+  register: _new_application_info
+  changed_when: _new_application_info.status | int == 201
+  no_log: true
+  when:
+    - not _application_info.json.results | selectattr("name", "equalto", automationcatalog_controller_app_name) | list | length
+
+- name: Set app id to the new application
+  set_fact:
+    _app_id: '{{ _new_application_info.json.id }}'
+  when: not _application_info.json.results | length
+
+- name: Set app id to existing application
+  set_fact:
+    _app_id: '{{ _application_info.json.results[0].id }}'
+  when: _application_info.json.results | length
+
+- name: Retrieve token
+  uri:
+    url: "{{ automation_controller_main_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/tokens/?application={{ _app_id }}&description={{ (automationcatalog_controller_app_name ~ ' - ' ~ automationcatalog_main_url) | urlencode }}"
+    user: '{{ automationcatalog_controller_username }}'
+    password: '{{ automationcatalog_controller_password }}'
+    force_basic_auth: true
+    follow_redirects: true
+    validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+  register: _tokens
+  no_log: true
+
+- block:
+    - name: Check if catalog settings exists
+      stat:
+        path: '/etc/ansible-automation-platform/services-catalog/settings'
+      register: automationcatalog_settings_location
+
+    - name: Slurp catalog settings file
+      slurp:
+        src: '/etc/ansible-automation-platform/services-catalog/settings'
+      register: automationcatalog_settings
+      when: automationcatalog_settings_location.stat.exists
+
+    - name: Reuse old token
+      set_fact:
+        automationcatalog_controller_token: "{{ automationcatalog_settings['content'] | b64decode | regex_search('PINAKES_CONTROLLER_TOKEN=(.+)', '\\1') | combine }}"
+      no_log: true
+      when: automationcatalog_settings_location.stat.exists
+
+    - name: Trigger generation of a new controller token if settings does not exist
+      set_fact:
+        automationcatalog_controller_regenerate_token: true
+      when: not automationcatalog_settings_location.stat.exists
+
+  when:
+    - _tokens.json.results[0].token is defined
+    - _tokens.json.results[0].token == '************'
+    - not automationcatalog_controller_regenerate_token | bool
+
+  rescue:
+    - name: Delete the old token
+      uri:
+        url: '{{ automation_controller_main_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/tokens/{{ _tokens.json.results[0].id }}/'
+        user: '{{ automationcatalog_controller_username }}'
+        password: '{{ automationcatalog_controller_password }}'
+        method: 'DELETE'
+        force_basic_auth: true
+        follow_redirects: true
+        validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+      no_log: true
+
+    - name: Trigger generation of a new controller token
+      set_fact:
+        automationcatalog_controller_regenerate_token: true
+
+- block:
+    - name: Generate token (if not created)
+      uri:
+        url: '{{ automation_controller_main_url }}/api/v2/users/{{ _user_info.json.results[0].id }}/tokens/'
+        user: '{{ automationcatalog_controller_username }}'
+        password: '{{ automationcatalog_controller_password }}'
+        method: POST
+        force_basic_auth: true
+        follow_redirects: true
+        body_format: json
+        body:
+          description: '{{ automationcatalog_controller_app_name }} - {{ automationcatalog_main_url }}'
+          scope: write
+          application: '{{ _app_id }}'
+        validate_certs: '{{ automationcatalog_controller_verify_ssl | bool }}'
+        status_code: [201,400]
+      register: _token_info
+      changed_when: _token_info.status | int == 201
+      no_log: true
+
+    - name: Store the token value
+      set_fact:
+        automationcatalog_controller_token: '{{ _token_info.json.token }}'
+      no_log: true
+  when:
+    - not _tokens.json.results | selectattr("description", "equalto", automationcatalog_controller_app_name) | list | length or automationcatalog_controller_regenerate_token | bool

@@ -1,0 +1,128 @@
+---
+
+- name: Enable SCL repository
+  include_role:
+    name: pulp_repos
+  vars:
+    __pulp_rhel_scl_repo_enable_default: True
+
+- name: Check if PostgreSQL < 10 is in use
+  block:
+    - name: Check if PostgreSQL < 10 is initialized.
+      stat:
+        path: "{{ postgresql_previous_data_dir }}/PG_VERSION"
+      register: previous_pgdata_dir_version
+
+    - name: Get PG_VERSION
+      command: "cat {{ postgresql_previous_data_dir }}/PG_VERSION"
+      register: pg_version
+      when: previous_pgdata_dir_version.stat.exists
+      tags:
+        - molecule-idempotence-notest
+  become: yes
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.distribution_major_version|int == 7
+
+- name: Stop PostgreSQL < 10 service
+  systemd:
+    name: "{{ postgresql_previous_daemon }}"
+    state: stopped
+    enabled: no
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.distribution_major_version|int == 7
+    - previous_pgdata_dir_version.stat.exists
+    - pg_version is defined
+    - pg_version.changed
+    - pg_version.stdout is version('10', '<')
+
+- name: Install and enable the SCL to be used for postgresql commands in geerlingguy.postgresql
+  block:
+    - name: Install PostgreSQL SCL
+      yum:
+        name: "{{ postgresql_packages }}"
+        state: present
+        exclude: python-unversioned-command
+
+    - name: Enable PostgreSQL SCL
+      template:
+        src: templates/postgresql_scl_profile.j2
+        dest: "{{ postgresql_profile_path }}"
+        mode: '0644'
+      become: yes
+
+    - name: Create SCL symlinks
+      file:
+        src: "{{ item }}"
+        dest: "{{ item.replace('/opt/rh/rh-postgresql10/root', '') }}"
+        state: link
+      loop:
+        - "/opt/rh/rh-postgresql10/root/usr/lib64/libpq.so.rh-postgresql10-5"
+        - "/opt/rh/rh-postgresql10/root/usr/bin/psql"
+      register: symlink_result
+      failed_when: "symlink_result is failed and 'refusing to convert from file to symlink' not in symlink_result.msg"
+      check_mode: false
+  become: yes
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.distribution_major_version|int == 7
+
+- name: Upgrade PostgreSQL < 10
+  block:
+    # https://access.redhat.com/documentation/en-us/red_hat_software_collections/3/html/3.3_release_notes/chap-migration#sect-Migration-PostgreSQL-9_6-10
+    - name: Backup previous PostgreSQL
+      copy:
+        src: "{{ postgresql_previous_data_dir }}"
+        remote_src: yes
+        dest: "{{ postgresql_data_dir.replace('data', 'backup') }}"
+        mode: '0644'
+      check_mode: false
+
+    - name: Check if PostgreSQL database is initialized.
+      stat:
+        path: "{{ postgresql_data_dir }}/PG_VERSION"
+      register: pgdata_dir_version
+
+    - name: Upgrade to PostgreSQL 10
+      shell: >-
+        source scl_source enable rh-postgresql10
+        && {{ postgresql_bin_path }}/postgresql-setup --upgrade --upgrade-from=rh-postgresql96-postgresql
+      when:
+        - not pgdata_dir_version.stat.exists
+  become: yes
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.distribution_major_version|int == 7
+    - previous_pgdata_dir_version.stat.exists
+    - pg_version is defined
+    - pg_version.changed
+    - pg_version.stdout is version('10', '<')
+
+- name: Reinstall tzdata
+  # Hack to fix tzdata issue:
+  # https://gitlab.com/redhat/centos-stream/release-engineering/kickstarts/-/blob/main/CentOS-Stream-9-container-base.ks#L47-50
+  # "if you want to change the timezone, bind-mount it from the host or reinstall tzdata"
+  block:
+    - name: Downgrade tzdata
+      dnf:
+        name: http://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/Packages/tzdata-2021e-1.el9.noarch.rpm
+        state: present
+
+    - name: Upgrade tzdata  # noqa package-latest
+      dnf:
+        name: tzdata
+        state: latest
+        security: yes
+
+  become: yes
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.distribution_major_version|int == 9
+
+- name: Include geerlingguy.postgresql role
+  block:
+    - name: Install and configure PostgreSQL
+      include_role:
+        name: geerlingguy.postgresql
+  become: yes

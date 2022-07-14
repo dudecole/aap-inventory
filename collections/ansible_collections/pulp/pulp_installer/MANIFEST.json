@@ -1,0 +1,43 @@
+{
+ "collection_info": {
+  "namespace": "pulp",
+  "name": "pulp_installer",
+  "version": "3.18.6",
+  "authors": [
+   "Pulp Project Developers <pulp-dev@redhat.com>"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "pulp",
+   "pulpcore",
+   "content",
+   "software_repositories",
+   "lifecycle_management",
+   "content_delivery"
+  ],
+  "description": "A collection of Ansible roles to install & configure Pulp 3 from PyPI",
+  "license": [
+   "GPL-2.0-or-later"
+  ],
+  "license_file": null,
+  "dependencies": {
+   "ansible.posix": "*",
+   "community.postgresql": "*",
+   "community.crypto": ">=1.0.0",
+   "community.general": "*",
+   "mdellweg.filters": "*"
+  },
+  "repository": "https://github.com/pulp/pulp_installer",
+  "documentation": "https://docs.pulpproject.org/pulp_installer/",
+  "homepage": "https://pulpproject.org/",
+  "issues": "https://github.com/pulp/pulp_installer/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "5dc2cf7ef2fd183ca45faf88100c4effcd592aee643e4b0ff8651a589c09ac3b",
+  "format": 1
+ },
+ "format": 1
+}

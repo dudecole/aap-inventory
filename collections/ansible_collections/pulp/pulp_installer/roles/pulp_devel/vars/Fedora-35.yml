@@ -1,0 +1,18 @@
+---
+pulp_devel_distro_pkgs:
+  - bash-completion
+  - curl
+  - dnf-utils
+  - fd-find
+  - fzf
+  - nc
+  - nmap
+  - python-django-bash-completion
+  - python3-setuptools
+  - python3-virtualenvwrapper
+  - ripgrep
+  - vim-enhanced
+  - rubygems
+  - ruby-devel
+  - crun
+  - setroubleshoot

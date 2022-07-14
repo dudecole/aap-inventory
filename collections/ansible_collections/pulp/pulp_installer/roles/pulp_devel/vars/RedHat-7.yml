@@ -1,0 +1,9 @@
+---
+pulp_devel_distro_pkgs:
+  - curl
+  - nc
+  - python-virtualenvwrapper
+  - ruby-devel
+  - jnettop
+  - rubygems
+  - setroubleshoot

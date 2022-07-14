@@ -1,0 +1,43 @@
+---
+- block:
+    - name: Enable required nginx dnf modules
+      shell: |
+        dnf module -y reset nginx && dnf module -y enable nginx:1.20
+      args:
+        warn: false
+
+  rescue:
+    - name: Enable required dnf modules
+      shell: |
+        dnf module -y reset nginx && dnf module -y enable nginx:1.18
+      args:
+        warn: false
+
+  when: ansible_distribution_major_version == "8"
+
+- name: Install nginx
+  dnf:
+    name: 'nginx'
+    state: present
+
+- block:
+
+    - name: ensure libsemanage-python is installed
+      dnf:
+        name: '{{ libsemanage_python_pkg }}'
+        state: present
+
+    - name: configure selinux Platform nginx
+      seboolean:
+        name: '{{item}}'
+        persistent: yes
+        state: 'true'
+      with_items:
+        - httpd_can_network_connect
+
+  when: ansible_selinux is defined and ansible_selinux.status == "enabled"
+
+- name: configure nginx to startup automatically
+  service:
+    name: nginx
+    enabled: yes

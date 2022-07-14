@@ -1,0 +1,71 @@
+---
+- name: Set database to internal or external
+  set_fact:
+    config_dynamic_database: "{{ ( (pg_host is not defined or pg_host == '' or pg_host == '127.0.0.1' or pg_host == '::1') or (pg_host is match('/.*')) ) | ternary('internal', 'external') }}"
+
+- name: Hub set database to internal or external
+  set_fact:
+    automationhub_config_dynamic_database: "{{ ( (automationhub_pg_host is not defined or automationhub_pg_host == '' or automationhub_pg_host == '127.0.0.1' or automationhub_pg_host == '::1') or (automationhub_pg_host is match('/.*')) ) | ternary('internal', 'external') }}"
+
+- name: Catalog set database to internal or external
+  set_fact:
+    automationcatalog_config_dynamic_database: "{{ ( (automationcatalog_pg_host is not defined or automationcatalog_pg_host == '' or automationcatalog_pg_host == '127.0.0.1' or automationcatalog_pg_host == '::1') or (automationcatalog_pg_host is match('/.*')) ) | ternary('internal', 'external') }}"
+
+- name: Controller database decision
+  debug:
+    var: config_dynamic_database
+
+- name: Hub database decision
+  debug:
+    var: automationhub_config_dynamic_database
+
+- name: Catalog database decision
+  debug:
+    var: automationcatalog_config_dynamic_database
+
+- name: Set postgres host and port to local if not set
+  set_fact:
+    pg_host: '127.0.0.1'
+    pg_port: 5432
+  when: "pg_host is not defined or pg_host == ''"
+
+- name: Set Automation Services Catalog postgres host and port to local if not set
+  set_fact:
+    automationcatalog_pg_host: '127.0.0.1'
+    automationcatalog_pg_port: 5432
+  when: "automationcatalog_pg_host is not defined or automationcatalog_pg_host == ''"
+
+- name: Ensure connectivity to hosts and gather facts
+  setup:
+
+- name: Ensure user is root
+  fail: msg="UID on remote machine is {{ ansible_effective_user_id }} ({{ config_dynamic_user }} required). Check Ansible connection and become settings."
+  become: True
+  when: ansible_effective_user_id != config_dynamic_user
+
+- name: Determine Automation Controller main hostname for Automation Services Catalog
+  set_fact:
+    _controller_main_hostname: "{{ routable_hostname | default(ansible_host) }}"
+  when:
+    - not automation_controller_main_url | default('') | length
+    - groups['automationcatalog'] | default([]) | length
+    - groups['automationcontroller'] | default([]) | length
+    - inventory_hostname == groups['automationcontroller'][0]
+
+- name: Check if node is registered with RHSM
+  command: subscription-manager identity
+  ignore_errors: true
+  register: _rhsm_registered_check
+
+- set_fact:
+    _rhsm_registered: "{{ ( _rhsm_registered_check.rc == 0 ) | ternary(true, false) }}"
+
+- name: Determine auth mode for Analytics Collection for Catalog
+  set_fact:
+    _automationcatalog_analytics_use_cred: "{{ ( insights_username | default('') | length and insights_password | default('') | length ) | ternary(true, false) }}"
+  when:
+    - groups['automationcatalog'] | default([]) | length
+    - _automationcatalog_enable_analytics_collection | bool
+
+# Note: We don't validate postgres connectivity because the clients tools are not yet installed to validate with.
+# We could verify socket connectivity to the ip/port but would need to do so using delegate_to

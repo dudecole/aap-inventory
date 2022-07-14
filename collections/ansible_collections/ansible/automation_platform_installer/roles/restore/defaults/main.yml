@@ -1,0 +1,8 @@
+---
+backup_dir: /var/backups/automation-platform/
+restore_database: 'internal'
+pg_database: awx
+restore_backup_file: '{{ setup_dir }}/automation-platform-backup-latest.tar.gz'
+restore_file_prefix: "automation-platform-restore"
+use_compression: False
+db_filename: tower.db

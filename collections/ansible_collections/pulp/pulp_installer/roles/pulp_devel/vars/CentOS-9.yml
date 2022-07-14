@@ -1,0 +1,12 @@
+---
+pulp_devel_distro_pkgs:
+  - bash-completion
+  - dnf-utils
+  - nc
+  - nmap
+  - python3-setuptools
+  - vim-enhanced
+  - ruby-devel
+  - rubygems
+  - setroubleshoot
+  - crun

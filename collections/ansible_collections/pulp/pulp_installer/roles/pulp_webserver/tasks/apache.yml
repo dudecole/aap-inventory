@@ -1,0 +1,76 @@
+---
+- name: Install Apache
+  block:
+
+    - name: Install Apache
+      package:
+        name: "{{ pulp_webserver_apache_package }}"
+        state: present
+
+    - name: Install Apache vhost file
+      template:
+        src: pulp-vhost.conf.j2
+        dest: "{{ pulp_webserver_apache_vhost_dir }}/pulp-vhost.conf"
+        mode: '0644'
+      notify: reload apache
+
+    - name: Enable Apache mod files
+      apache2_module:
+        state: present
+        name: "{{ item }}"
+      loop:
+        - headers
+        - proxy
+        - proxy_http
+        - ssl
+      when: ansible_facts.os_family == "Debian"
+      notify: reload apache
+
+    - name: Enable Apache vhost files
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link
+      loop:
+        - src: ../sites-available/pulp-vhost.conf
+          dest: /etc/apache2/sites-enabled/pulp-vhost.conf
+      when: ansible_facts.os_family == "Debian"
+      notify: reload apache
+
+    - name: Remove default apache vhost file
+      file:
+        state: absent
+        path: /etc/apache2/sites-enabled/000-default.conf
+      when: ansible_facts.os_family == "Debian"
+      notify: reload apache
+
+    - name: Create directory for Pulp Apache snippets
+      file:
+        path: "{{ pulp_webserver_apache_snippets_dir }}"
+        state: directory
+        mode: '0755'
+        serole: _default
+        setype: _default
+        seuser: _default
+
+    - name: Symlink Apache snippets
+      script:
+        cmd: symlink_snippets.py {{ __pulp_webserver_plugin.key | regex_replace("-", "_") | quote }} {{ pulp_webserver_server }}.conf
+      args:
+        executable: '{{ (pulp_install_source == "packages") | ternary(pulp_python_interpreter, pulp_install_dir ~ "/bin/python") }}'
+      register: snippets
+      loop: '{{ pulp_install_plugins_normalized | dict2items }}'
+      loop_control:
+        loop_var: __pulp_webserver_plugin
+      changed_when: false
+      check_mode: false
+      notify: reload apache
+
+    - name: Start and enable Apache
+      systemd:
+        name: "{{ pulp_webserver_apache_service }}"
+        state: started
+        enabled: true
+        daemon_reload: true
+
+  become: true

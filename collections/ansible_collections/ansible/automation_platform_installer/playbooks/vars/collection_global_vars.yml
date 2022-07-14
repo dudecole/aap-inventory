@@ -1,0 +1,38 @@
+automationhub_package_name: 'automation-hub'
+automationhub_package_version: '4.5.0'
+
+automationcatalog_package_name: 'automation-services-catalog'
+
+_registry_url: "{{ registry_url | default('registry.redhat.io', true) }}"
+
+_automation_platform_default_namespace: "{{ automation_platform_default_namespace | default('ansible-automation-platform-22') }}"
+_ee_image_base: "{{ ee_image_base | default(_registry_url + '/' + _automation_platform_default_namespace + '/') }}"
+
+_pg_username: "{{ pg_username | default('awx') }}"
+_pg_database: "{{ pg_database | default('awx') }}"
+_pg_sslmode: "{{ pg_sslmode | default('prefer') }}"
+
+_automationhub_pg_username: "{{ automationhub_pg_username | default('automationhub') }}"
+_automationhub_pg_database: "{{ automationhub_pg_database | default('automationhub') }}"
+_automationhub_pg_sslmode: "{{ automationhub_pg_sslmode | default('prefer') }}"
+
+_automationcatalog_pg_username: "{{ automationcatalog_pg_username | default('automationservicescatalog') }}"
+_automationcatalog_pg_database: "{{ automationcatalog_pg_database | default('automationservicescatalog') }}"
+_automationcatalog_pg_sslmode: "{{ automationcatalog_pg_sslmode | default('prefer') }}"
+
+_automationcatalog_http_port: '{{ automationcatalog_http_port | default(80) }}'
+_automationcatalog_https_port: '{{ automationcatalog_https_port | default(443) }}'
+
+# SSL CA trust store
+ca_trust_bundle: '/etc/pki/tls/certs/ca-bundle.crt'
+
+_disable_https: "{{ disable_https | default(false) }}"
+_nginx_disable_https: "{{ nginx_disable_https | default(_disable_https) }}"
+_nginx_http_port: "{{ nginx_http_port|default(80) }}"
+_nginx_https_port: "{{ nginx_https_port|default(443) }}"
+
+_enable_insights_collection: "{{ enable_insights_collection | default(true) }}"
+
+automation_analytics_url: 'https://cloud.redhat.com/api/ingress/v1/upload'
+automation_analytics_cert_url: 'https://cert.cloud.redhat.com/api/ingress/v1/upload'
+_automationcatalog_enable_analytics_collection: "{{ automationcatalog_enable_analytics_collection | default(true) }}"

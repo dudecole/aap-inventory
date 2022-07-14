@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    inv_file: "inventory.ini"
+
+  tasks:
+    - name: run setup.sh please
+      command: ./setup.sh -i "{{ inv_file }}"

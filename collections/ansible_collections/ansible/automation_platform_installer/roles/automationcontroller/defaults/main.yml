@@ -1,0 +1,20 @@
+---
+# Django Options
+admin_username: admin
+admin_email: admin@example.com
+
+# Params
+awx_install_pg_init_name: None
+
+# Default image for containerized job runs
+container_groups_image: "{{ _ee_image_base }}ee-supported-rhel8:latest"
+
+global_job_execution_environments:
+  - name: "Default execution environment"
+    image: "{{ _ee_image_base }}ee-supported-rhel8:latest"
+  - name: "Ansible Engine 2.9 execution environment"
+    image: "{{ _ee_image_base }}ee-29-rhel8:latest"
+  - name: "Minimal execution environment"
+    image: "{{ _ee_image_base }}ee-minimal-rhel8:latest"
+
+control_plane_execution_environment: "{{ _ee_image_base }}ee-supported-rhel8:latest"

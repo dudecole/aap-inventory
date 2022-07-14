@@ -1,0 +1,2 @@
+---
+redis_conf_location: '/etc/redis.conf'

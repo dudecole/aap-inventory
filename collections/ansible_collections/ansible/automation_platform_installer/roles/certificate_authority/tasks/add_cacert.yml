@@ -1,0 +1,33 @@
+---
+- name: Ensure ca-certificates is installed
+  package:
+    name: ca-certificates
+    state: present
+
+- name: Copy custom CA cert
+  copy:
+    src: "{{ custom_ca_cert }}"
+    dest: "/etc/pki/ca-trust/source/anchors/ansible-automation-platform-custom-ca-cert.crt"
+    mode: '0644'
+    owner: root
+    group: root
+  notify: Update CA trust
+  when: custom_ca_cert is defined
+
+- name: Slurp AAP CA certificate
+  slurp:
+    src: /etc/ansible-automation-platform/ca/ansible-automation-platform-managed-ca-cert.crt
+  delegate_to: "{{ groups['aap_ca_server'][0] }}"
+  register: aap_ca_cacert
+  no_log: True
+
+- name: Place AAP CA certificate
+  copy:
+    content: "{{ aap_ca_cacert.content | b64decode }}"
+    dest: "/etc/pki/ca-trust/source/anchors/ansible-automation-platform-managed-ca-cert.crt"
+    owner: root
+    group: root
+    follow: yes
+    mode: 0644
+    force: true
+  notify: Update CA trust

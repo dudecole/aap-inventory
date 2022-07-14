@@ -1,0 +1,22 @@
+---
+el_dependencies:
+  - python3-psycopg2
+  - python3-setuptools
+  - python3-libselinux
+  - python3-setools
+  - python3-cryptography
+  - dnf-utils
+  - sudo
+  - acl
+
+dnf_modules:
+  - 'python38'
+  - 'python39'
+  - 'redis:6'
+
+dnf_modules_disable:
+  - 'php'
+
+upgrade_postgres: false
+
+existing_pg_dir: '/var/lib/pgsql/data'

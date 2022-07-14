@@ -4,3 +4,6 @@
 
 # Vault file
 *vault*
+
+# DSstore
+*.DS_Store*

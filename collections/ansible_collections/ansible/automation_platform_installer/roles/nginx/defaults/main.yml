@@ -1,0 +1,5 @@
+---
+automationcontroller_client_max_body_size: '1m'
+nginx_exec_vars_only: false
+nginx_disable_hsts: "{{ disable_hsts|default(false) }}"
+nginx_user_headers: []

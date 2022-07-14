@@ -1,0 +1,13 @@
+---
+- name: Copy /var/lib/pulp files
+  shell: rsync -auq /var/lib/pulp/ {{ backup_dir.rstrip("/") }}/automationhub/automationhub/var_lib_pulp/
+  when: automationhub_backup_collections | default(true) | bool
+
+- name: Check if signing key is present
+  stat:
+    path: /etc/pulp/certs/galaxy_signing_service.gpg
+  register: signing_key
+
+- name: Copy /etc/pulp/certs/galaxy_signing_service.gpg
+  shell: rsync -auq /etc/pulp/certs/galaxy_signing_service.gpg {{ backup_dir.rstrip("/") }}/automationhub/automationhub/signing_key
+  when: signing_key.stat.exists

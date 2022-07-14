@@ -1,0 +1,38 @@
+---
+- block:
+    - name: Get Hub API token
+      uri:
+        url: "{{ _automationhub_main_url }}/api/galaxy/v3/auth/token/"
+        method: POST
+        body_format: json
+        user: admin
+        password: "{{ automationhub_admin_password }}"
+        validate_certs: false
+      register: _hub_api_token
+      no_log: true
+
+    - set_fact:
+        automationhub_api_token: "{{ _hub_api_token.json.token }}"
+      no_log: true
+
+    - name: Save Hub token
+      copy:
+        content: "{{ automationhub_api_token }}"
+        dest: "{{ pulp_user_home | default('/var/lib/pulp') + '/admin_token' }}"
+        owner: pulp
+        group: pulp
+        mode: '0600'
+
+  when: generate_automationhub_token | default(false) | bool
+
+- name: Create Hub credentials and associate with EEs
+  automationhub_credentials:
+    automationhub_url: "{{ _automationhub_main_url }}"
+    username: admin
+    password: "{{ automationhub_admin_password }}"
+    token: "{{ automationhub_api_token | default(omit) }}"
+    verify_ssl: true
+    update_control_plane_cred: "{{ true if bundle_install | default(false) | bool else false }}"
+  vars:
+    ansible_python_interpreter: /var/lib/awx/venv/awx/bin/python3
+  delegate_to: "{{ groups['automationcontroller'][0] }}"

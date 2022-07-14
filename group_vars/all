@@ -1,0 +1,7 @@
+---
+tower_package_name: 'automation-controller'
+tower_package_version: '4.2.0'
+
+automation_platform_version: '2.2.0'
+
+minimum_ansible_version: '2.11'

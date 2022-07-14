@@ -1,0 +1,57 @@
+---
+- include_tasks: init.yml
+
+- name: 'Create {{ aap_ca_servicename }} private key'
+  community.crypto.openssl_privatekey:
+    path: '{{ aap_service_cert_path }}/{{ aap_service_cert_name }}.key'
+    force: '{{ aap_service_regen_cert }}'
+    owner: "{{ aap_service_owner }}"
+    group: "{{ aap_service_group }}"
+    return_content: false
+  no_log: true
+  register: write_key
+
+- name: 'Create CSR for {{ aap_ca_servicename }} node/s'
+  community.crypto.openssl_csr_pipe:
+    privatekey_path: '{{ aap_service_cert_path }}/{{ aap_service_cert_name }}.key'
+    common_name: "{{ aap_service_hostname }}"
+    subject_alt_name:
+      - "{{ aap_service_hostname | ansible.automation_platform_installer.aap_subject_alt_name }}"
+    key_usage:
+      - keyEncipherment
+      - digitalSignature
+    extended_key_usage:
+      - serverAuth
+  no_log: true
+  register: csr
+
+- name: 'Sign {{ aap_ca_servicename }} public key'
+  community.crypto.x509_certificate_pipe:
+    csr_content: "{{ csr.csr }}"
+    provider: ownca
+    ownca_path: /etc/ansible-automation-platform/ca/ansible-automation-platform-managed-ca-cert.crt
+    ownca_privatekey_path: /etc/ansible-automation-platform/ca/ansible-automation-platform-managed-ca-key.key
+    ownca_privatekey_passphrase: "{{ aap_ca_pass | default(omit) }}"
+    ownca_not_after: "+365d"
+    ownca_not_before: "-1d"
+  delegate_to: "{{ groups['aap_ca_server'][0] }}"
+  no_log: true
+  register: certificate
+
+- name: 'Write public key to {{ aap_ca_servicename }} node/s'
+  copy:
+    dest: '{{ aap_service_cert_path }}/{{ aap_service_cert_name }}.{{ aap_service_cert_extension }}'
+    content: "{{ certificate.certificate }}"
+    owner: "{{ aap_service_owner }}"
+    group: "{{ aap_service_group }}"
+    follow: yes
+    mode: 0600
+    force: true
+  register: write_certificate
+
+- name: Signal webserver restart if certificate pair changes
+  set_fact:
+    aap_service_webserver_restart: true
+  when:
+    - inventory_hostname not in groups['database'] | default([])
+    - (write_key is changed or write_certificate is changed)
