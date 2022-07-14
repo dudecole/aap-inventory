@@ -3,8 +3,9 @@
   connection: local
 
   vars_file:
-    - inventory.ini
+    - inventory.yml
 
   tasks:
     - name: run setup.sh please
-      command: ./setup.sh -i "{{ inv_file }}"
+      command: ./setup.sh -i inventory.yml
+#"./setup.sh -i {{ tower_install_inventory }} {{ tower_install_extra_vars }} -- {{ tower_vault_params }}"
