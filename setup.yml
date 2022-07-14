@@ -1,15 +1,19 @@
 # <TODO-
-# - cleanup this mess...
-#
+# - clean up this mess...
 # >
 # This was originally intended to be a wrapper
 # for the `setup.sh` located with the AAP 
-# download/bundle pack.  Still not complete...
+# download/bundle pack.  But that seems
+# kind of stupid and instead maybe just call
+# the controller collection AAP installer playbook..
+# This is not complete...
+#
 ---
 - hosts: all
 
+  # /ansible referring to the NFS Vol mounted on the nodes who want NFS
   vars:
-    setup_path: /ansible/aap-setup/setup.sh
+    setup_path: /ansible/aap-setup/setup.sh 
     base_path: /ansible/aap-setup
     inv_file: inventory
     controller_ip: 192.168.59.10
