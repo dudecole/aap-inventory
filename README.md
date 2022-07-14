@@ -24,8 +24,13 @@ to the AAP Controller Job Template Webhook URL.
 
 ## setup.sh
 
-This script and some of the original files from the AAP installation
-bundle/pack are held in this repository as well.  
+This script and some of the contents of this repository come from
+the original installation files in the AAP installation
+bundle/pack.
+<TODO: 
+- adding the controller collection playbooks to the Job Template
+  - test/fix?
+>
 
 ## setup.yml
 Was created as a wrapper to the setup.sh to place into a runnable
