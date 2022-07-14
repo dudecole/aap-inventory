@@ -4,41 +4,46 @@
   vars:
     setup_path: /ansible/aap-setup/setup.sh
     base_path: /ansible/aap-setup
-    inv_file: inventory.bak
+    inv_file: inventory
     controller_ip: 192.168.59.10
 
   tasks:
   - name: ok what directory am I in.
     shell:
       cmd: |
+        pwd
+        ls -al
         ls -al /ansible
-    register: results
+    register: cmd_results
 
-      #  - name: debug command_results
-      #    debug:
-      #      msg: "{{ results }}"
+  - name: debug command_results
+    debug:
+      msg: "{{ cmd_results }}"
 
-  - name: copy setup contents shared volume
+  - name: copy setup contents from local/project dir - to NFS volume
     copy:
-      src: inventory
+      src: "{{ inv_file }}" #inventory (.ini or nothing)
       dest: "{{ base_path }}/{{ inv_file }}"
       mode: 0755
       owner: nobody
       group: nobody
     register: copy_results
-    delegate_to: "{{ controller_ip }}" 
+    delegate_to: localhost #maybe this works..?
+    # this runs for all hosts, need to limit to first in index or something
 
-      #  - name: debug command_results
-      #    debug:
-      #      msg: "{{ copy_results }}"
-      
-  - name: run setup.sh 
-    command: "{{ setup_path }} -i {{ base_path }}/{{ inv_file }} -- -vvv -e @{{ base_path }}/creds.yml"
-    register: command_results
-    delegate_to: "{{ controller_ip }}" 
-
-  - name: debug command_results
+  - name: debug copy_results
     debug:
-      msg: "{{ command_results }}"
+      msg: "{{ copy_results }}"
+
+########################        
+# leaving out for now..       
+#  - name: run setup.sh 
+#    command: "{{ setup_path }} -i {{ base_path }}/{{ inv_file }} -- -vvv -e @{{ base_path }}/creds.yml"
+#    register: command_results
+#    delegate_to: "{{ controller_ip }}" 
+#
+#  - name: debug command_results
+#    debug:
+#      msg: "{{ command_results }}"
 
     
