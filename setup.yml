@@ -5,6 +5,7 @@
     setup_path: /ansible/aap-setup/setup.sh
     base_path: /ansible/aap-setup
     inv_file: inventory.bak
+    controller_ip: 192.168.59.10
 
   tasks:
   - name: ok what directory am I in.
@@ -25,6 +26,7 @@
       owner: nobody
       group: nobody
     register: copy_results
+    delegate_to: "{{ controller_ip }}" 
 
       #  - name: debug command_results
       #    debug:
