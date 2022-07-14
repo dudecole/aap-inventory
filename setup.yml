@@ -12,11 +12,10 @@
       cmd: |
         ls -al /ansible
     register: results
-      #    delegate_to: 192.168.59.10
 
-  - name: debug command_results
-    debug:
-      msg: "{{ results }}"
+      #  - name: debug command_results
+      #    debug:
+      #      msg: "{{ results }}"
 
   - name: copy setup contents shared volume
     copy:
@@ -27,16 +26,17 @@
       group: nobody
     register: copy_results
 
-  - name: debug command_results
-    debug:
-      msg: "{{ copy_results }}"
-      
-      #  - name: run setup.sh 
-      #    command: "{{ setup_path }} -i {{ base_path }}/{{ inv_file }} -- -vvv -e @{{ base_path }}/creds.yml"
-      #    register: command_results
-      #
       #  - name: debug command_results
       #    debug:
-      #      msg: "{{ command_results }}"
+      #      msg: "{{ copy_results }}"
+      
+  - name: run setup.sh 
+    command: "{{ setup_path }} -i {{ base_path }}/{{ inv_file }} -- -vvv -e @{{ base_path }}/creds.yml"
+    register: command_results
+    delegate_to: 192.168.59.10
+
+  - name: debug command_results
+    debug:
+      msg: "{{ command_results }}"
 
     
