@@ -35,7 +35,7 @@
   - name: run setup.sh 
     command: "{{ setup_path }} -i {{ base_path }}/{{ inv_file }} -- -vvv -e @{{ base_path }}/creds.yml"
     register: command_results
-    delegate_to: 192.168.59.10
+    delegate_to: "{{ controller_ip }}" 
 
   - name: debug command_results
     debug:
