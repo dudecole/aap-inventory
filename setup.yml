@@ -1,9 +1,9 @@
 ---
-- hosts: localhost
+- hosts: 192.168.59.10
   connection: local
 
-  vars:
-    inv_file: "inventory.ini"
+  vars_file:
+    - inventory.ini
 
   tasks:
     - name: run setup.sh please
