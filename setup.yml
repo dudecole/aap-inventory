@@ -31,11 +31,7 @@
       delegate_to: localhost
 
 
-# run the setup from the setup_path
----
 - hosts: all
-
-  # /ansible referring to the NFS Vol mounted on the nodes who want NFS
   vars:
     setup_path: /ansible/aap-setup/setup.sh 
     base_path: /ansible/aap-setup
