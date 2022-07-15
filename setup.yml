@@ -30,8 +30,11 @@
       pwd
       echo ""
       echo "Getting the /ansible contents now"
+      ls -al "{{ base_path }}"
       echo ""
-      ls -al /ansible/aap-setup
+      echo "Inventory File"
+      cat "{{ inv_file }}"
+      echo ""
       echo ""
       echo "Ending Now.."
       echo ""
