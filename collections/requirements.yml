@@ -1,9 +1,9 @@
 ---
 collections:
-- name: ansible.posix
-- name: awx.awx
-- name: community.general
-- name: community.crypto
-- name: community.postgresql
-- name: pulp.pulp_installer
-- name: redhat_cop.controller_configuration
+  #- name: ansible.posix
+  #- name: awx.awx
+  #- name: community.general
+  #- name: community.crypto
+  #- name: community.postgresql
+  #- name: pulp.pulp_installer
+  #- name: redhat_cop.controller_configuration
