@@ -20,35 +20,46 @@
     controller_ip: 192.168.59.10
 
   tasks:
-    - name: copy file between directories
-      copy: 
-        src: "{{ inv_file }}" #inventory (.ini or nothing)
-        dest: "{{ base_path }}/{{ inv_file }}"
-        mode: 0755
-        owner: nobody
-        group: nobody
-      register: copy_results
-      delegate_to: localhost
-
-
-- hosts: all
-  vars:
-    setup_path: /ansible/aap-setup/setup.sh 
-    base_path: /ansible/aap-setup
-    inv_file: inventory
-    controller_ip: 192.168.59.10
-
-  tasks:
   - name: ok what directory am I in.
     shell:
       cmd: |
         ls -al {{ base_path }}
     register: cmd_results
-    delegate_to: localhost
+#    delegate_to: localhost
 
   - name: debug command_results
     debug:
       msg: "{{ cmd_results }}"
+
+
+#      copy: 
+#        src: "{{ inv_file }}" #inventory (.ini or nothing)
+#        dest: "{{ base_path }}/{{ inv_file }}"
+#        mode: 0755
+#        owner: nobody
+#        group: nobody
+#      register: copy_results
+#      delegate_to: localhost
+
+#
+#- hosts: all
+#  vars:
+#    setup_path: /ansible/aap-setup/setup.sh 
+#    base_path: /ansible/aap-setup
+#    inv_file: inventory
+#    controller_ip: 192.168.59.10
+#
+#  tasks:
+#  - name: ok what directory am I in.
+#    shell:
+#      cmd: |
+#        ls -al {{ base_path }}
+#    register: cmd_results
+#    delegate_to: localhost
+#
+#  - name: debug command_results
+#    debug:
+#      msg: "{{ cmd_results }}"
 
 
 #  - name: run setup.sh 
