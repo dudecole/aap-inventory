@@ -21,10 +21,10 @@
 
   tasks:
   - name: ok what directory am I in.
-    command: |
+    shell:
+      cmd: |
         ls -al /ansible
-        cd /ansible/aap-setup
-        pwd
+        cd /ansible/aap-setup 
     register: cmd_results
 #    delegate_to: localhost
 
