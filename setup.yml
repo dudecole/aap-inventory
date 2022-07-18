@@ -17,7 +17,7 @@
       group: root
     register: file_results
     become: yes
-    delegate_to: localhost
+      #    delegate_to: localhost
 
   - name: debug the file results
     debug:
@@ -33,7 +33,7 @@
       group: root
     register: file_results
     become: yes
-    delegate_to: localhost
+      #    delegate_to: localhost
 
   - name: debug the file results
     debug:
