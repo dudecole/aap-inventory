@@ -65,6 +65,9 @@
     debug:
       msg: "{{ cmd_results }}"
 
+  - name: pause
+    pause:
+      minutes: 5
 
 #      copy: 
 #        src: "{{ inv_file }}" #inventory (.ini or nothing)
