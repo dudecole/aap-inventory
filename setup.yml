@@ -9,6 +9,9 @@
 # This is not complete...
 #
 ---
+#- hosts: localhost
+#  connection: local
+
 - hosts: localhost
   connection: local
 
@@ -37,7 +40,7 @@
       echo ""
       echo "Ending Now.."
     register: cmd_results
-#    delegate_to: localhost
+    delegate_to: 192.168.56.11
 
   - name: debug command_results
     debug:
