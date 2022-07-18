@@ -12,7 +12,7 @@
 #- hosts: localhost
 #  connection: local
 
-- hosts: all
+- hosts: 192.168.59.10
   #  connection: local
 
   # /ansible referring to the NFS Vol mounted on the nodes who want NFS
@@ -33,7 +33,7 @@
       force: true
     register: copy_results
     become: yes
-    delegate_to: localhost
+    delegate_to: 127.0.0.1
 
   - name: debug the directory results
     debug:
