@@ -25,23 +25,10 @@
   tasks:
   - name: ok what directory am I in.
     shell: |
-      echo "Starting..."
-      ls -al
-      echo ""
-      echo "Getting the PWD now"
-      #      cd /runner/
-      pwd
-      ls -al
-      echo ""
-      echo "Getting the /ansible contents now"
-      ls -al /ansible/aap-setup
-      echo ""
-      echo "WORKING DIR"
-      pwd
-      ls -al
       echo "CATTING INV File"
-      cat inventory > /ansible/aap-setup/crappy-stuff.txt
-      echo "LIST DIR CONTENTS NOW.."
+      touch /ansible/aap-setup/somefile-name.txt
+      cat inventory > /ansible/aap-setup/somefile-name.txt
+      echo "LIST /ANSIBLE CONTENTS NOW.."
       ls -al /ansible/aap-setup/
       #      cat inventory > /ansible/aap-setup/crappy-stuff1.txt
       #      echo "PRESENT WORKING DIR"
