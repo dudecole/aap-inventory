@@ -14,33 +14,59 @@
 
 - hosts: localhost
   connection: local
-
   # /ansible referring to the NFS Vol mounted on the nodes who want NFS
-  vars:
-    setup_path: /ansible/aap-setup/setup.sh 
-    base_path: /ansible
-    inv_file: inventory
-    controller_ip: 192.168.59.10
-    nfs_shared_volume: /ansible/aap-setup
+  #  vars:
+  #    setup_path: /ansible/aap-setup/setup.sh 
+  #    base_path: /ansible
+  #    inv_file: inventory
+  #    controller_ip: 192.168.59.10
+  #    nfs_shared_volume: /ansible/aap-setup
 
   tasks:
-  - name: loop through a number of times to create some dummy directories
-    copy:
-      #      src: "/runner/project/inventory"
-      content: "SOME CONTENT HERE..."
-      dest: "/ansible/inventory.dude" 
-      force: yes 
-        #    with_sequence: count=5
-      mode: 0777
-      owner: nobody
-      group: nobody
-    register: copy_results
-    become: yes
-      #    delegate_to: localhost
+  - name: ok what directory am I in.
+    shell: |
+      echo "Starting..."
+      ls -al
+      echo ""
+      echo "Getting the PWD now"
+      cd /runner/project
+      pwd
+      ls -al
+      echo ""
+      echo "Getting the /ansible contents now"
+      ls -al /ansible/aap-setup/
+      echo "WORKING DIR"
+      pwd
+      ls -al
+    register: command_output
+    delegate_to: localhost
 
-  - name: debug the directory results
+  - name: debug command_results
     debug:
-      msg: "{{ copy_results }}"
+      msg: "{{ command_output }}"
+
+  - name: pause
+    pause:
+      minutes: 5
+
+        #  - name: loop through a number of times to create some dummy directories
+        #    copy:
+        #      src: "/runner/project/inventory"
+        #      dest: "/ansible/inventory.dude" 
+        #      force: yes 
+        #        #    with_sequence: count=5
+        #      mode: 0777
+        #      owner: nobody
+        #      group: nobody
+        #    register: copy_results
+        #    become: yes
+        #    delegate_to: localhost
+        #
+        #  - name: debug the directory results
+        #    debug:
+        #      msg: "{{ copy_results }}"
+
+
 
 #  - name: loop through a number of times to create some dummy files 
 #    copy:
@@ -91,17 +117,14 @@
       #      ls -al
       #      echo "GET WORKING DIR"
       #      pwd
-    register: cmd_results
-    delegate_to: 192.168.56.11
-    become: true
+      #    register: cmd_results
+      #    delegate_to: 192.168.56.11
+      #    become: true
+      #
+      #  - name: debug command_results
+      #    debug:
+      #      msg: "{{ cmd_results }}"
 
-  - name: debug command_results
-    debug:
-      msg: "{{ cmd_results }}"
-
-  - name: pause
-    pause:
-      minutes: 5
 
 #      copy: 
 #        src: "{{ inv_file }}" #inventory (.ini or nothing)
