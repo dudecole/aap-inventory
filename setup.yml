@@ -39,6 +39,10 @@
       pwd
       ls -al
       echo "Dir contents"
+      echo "which ls and copy binary"
+      which cp
+      which ls
+      ls -al /ansible
       #      echo "Inventory File"
       #      cat "{{ inv_file }}"
       #      echo ""
