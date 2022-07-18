@@ -5,15 +5,13 @@
 
   - name: loop through a number of times to create some dummy directories
     copy:
-      src: "inventory"
+      content: "SOME CONTENT HERE.....WTF DUDE dude dude"
       dest: "/ansible/aap-setup/inventory.dude" 
       force: yes 
-        #    with_sequence: count=5
       mode: 0777
-      owner: nobody
-      group: nobody
+      owner: root
+      group: root
     register: copy_results
-    become: yes
     delegate_to: localhost
 
   - name: debug the directory results
