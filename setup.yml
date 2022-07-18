@@ -43,7 +43,8 @@
       cat inventory # > crappy-stuff.txt
       cat inventory > crappy-stuff1.txt
       pwd
-      ls -al 
+      echo "Getting /ansible/aap-setup/ contents now"
+      ls -al /ansible/aap-setup
     register: command_output
     delegate_to: localhost
 
