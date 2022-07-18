@@ -18,7 +18,7 @@
   # /ansible referring to the NFS Vol mounted on the nodes who want NFS
   vars:
     setup_path: /ansible/aap-setup/setup.sh 
-    base_path: /Users/darrencole/develop/nfs/aap-setup #/ansible/aap-setup
+    base_path: /ansible
     inv_file: inventory
     controller_ip: 192.168.59.10
 
