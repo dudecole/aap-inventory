@@ -34,7 +34,7 @@
       ls -al
       echo ""
       echo "Getting the /ansible contents now"
-      cd /ansible/aap-setup/
+      ls -al /ansible/aap-setup/
       echo "WORKING DIR"
       pwd
       ls -al
@@ -48,13 +48,14 @@
       #      cd /runner/project/
       #      pwd
       #      ls -al 
-      cp  /runner/project/inventory /ansible/aap-setup
-      echo "GET DIR CONTENTS NOW"
-      ls -al
-      echo "GET WORKING DIR"
-      pwd
+      #      cp  /runner/project/inventory /ansible/aap-setup
+      #      echo "GET DIR CONTENTS NOW"
+      #      ls -al
+      #      echo "GET WORKING DIR"
+      #      pwd
     register: cmd_results
     delegate_to: 192.168.56.11
+    become: true
 
   - name: debug command_results
     debug:
