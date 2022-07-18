@@ -29,7 +29,9 @@
       ls -al
       echo ""
       echo "Getting the PWD now"
+      cd /runner/project
       pwd
+      ls -al
       echo ""
       echo "Getting the /ansible contents now"
       ls -al "{{ base_path }}"
@@ -40,7 +42,7 @@
       echo ""
       echo "Ending Now.."
       echo "COPYING Inventory over now.."
-      cp "{{ inv_file }}" /ansible/aap-setup/
+      #      cp /runner/project/{{ inv_file }} /ansible/aap-setup/inventory.new
     register: cmd_results
     delegate_to: 192.168.56.11
 
