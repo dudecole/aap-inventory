@@ -1,37 +1,31 @@
 ---
 - hosts: localhost
   connection: local
+
   tasks:
-
-  - name: loop through a number of times to create some dummy directories
-    copy:
-      content: "SOME CONTENT HERE.....WTF DUDE dude dude"
-      dest: "/ansible/aap-setup/inventory.dude" 
+  - name: touch some files on the share 
+    file:
+      state: touch
+      path: "{{ nfs_shared_volume }}/darren-crappy-stuff-wtf.txt" 
       force: yes 
-      mode: 0777
-      owner: root
-      group: root
-    register: copy_results
-    delegate_to: localhost
+    register: file_results
+    become: yes
 
-  - name: debug the directory results
+  - name: debug the file results
     debug:
-      msg: "{{ copy_results }}"
+      msg: "{{ file_results }}"
 
+  - name: loop through a number of times to create some dummy files 
+    file:
+      state: touch
+      path: "{{ nfs_shared_volume }}/aap-setup/INVENTORY.CRUD.txt" 
+      force: yes 
+    register: file_results
+    become: yes
 
-
-#  - name: loop through a number of times to create some dummy files 
-#    copy:
-#      state: touch
-#      path: "{{ nfs_shared_volume }}/{{ inventory_hostname }}-{{ item }}-dir/{{ inventory_hostname }}-{{ item }}.txt" 
-#      force: yes 
-#    with_sequence: count=5
-#    register: file_results
-#    become: yes
-
-#- name: debug the file results
-#  debug:
-#    msg: "{{ file_results }}"
+  - name: debug the file results
+    debug:
+      msg: "{{ file_results }}"
 
 #nfs_shared_volume: "/ansible"
 #
