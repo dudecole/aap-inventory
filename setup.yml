@@ -39,9 +39,9 @@
     register: block_results
       
   - name: run setup.sh 
-    shell: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml | tee"
+    shell: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml"
     register: command_results
-      #    delegate_to: "{{ controller_ip }}" 
+    delegate_to: "192.168.56.11" 
 
   - name: debug command_results
     debug:
