@@ -34,7 +34,7 @@
       ls -al
       echo ""
       echo "Getting the /ansible contents now"
-      ls -al /ansible/
+      ls -al /ansible
       echo "WORKING DIR"
       pwd
       ls -al
@@ -47,7 +47,7 @@
 
   - name: pause
     pause:
-      minutes: 5
+      minutes: 2
 
         #  - name: loop through a number of times to create some dummy directories
         #    copy:
