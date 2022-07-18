@@ -2,37 +2,21 @@
 - hosts: all
 
   vars:
-    nfs_shared_volume: "/ansible"
     nfs_shared_volume_setup: "/ansible/aap-setup"
-    nfs_shared_volume_inventory: "/runner/project/inventory"
+    runner_inventory: "/runner/project/inventory"
+    inventory_file_name: "inventory"
     inventory_contents: |
-      {{ lookup('file', nfs_shared_volume_inventory) }}
+      {{ lookup('file', runner_inventory) }}
 
   tasks:
   - name: debug inventory contents
     debug:
       msg: "{{ inventory_contents }}"
 
-  - name: touch some files on the share 
-    file:
-      state: touch
-      path: "{{ nfs_shared_volume_setup }}/darren-crappy-stuff-wtf.txt" 
-      force: yes 
-      mode: 0777
-      owner: root
-      group: root
-    register: file_results
-    become: yes
-      #    delegate_to: localhost
-
-  - name: debug the file results
-    debug:
-      msg: "{{ file_results }}"
-
   - name: loop through a number of times to create some dummy files 
     file:
       state: touch
-      path: "{{ nfs_shared_volume_setup }}/INVENTORY.INI" 
+      path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       force: yes 
       mode: 0777
       owner: root
@@ -48,7 +32,7 @@
   - name: add some lines to the new file
     blockinfile:
       content: "{{ inventory_contents }}"
-      dest: "{{ nfs_shared_volume_setup }}/INVENTORY.INI" 
+      dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
     register: block_results
       
 
