@@ -13,8 +13,8 @@
       path: "{{ nfs_shared_volume_setup }}/darren-crappy-stuff-wtf.txt" 
       force: yes 
       mode: 0777
-      owner: awx
-      group: awx
+      owner: root
+      group: root
     register: file_results
     become: yes
     delegate_to: localhost
@@ -29,8 +29,8 @@
       path: "{{ nfs_shared_volume_setup }}/INVENTORY.CRUD.txt" 
       force: yes 
       mode: 0777
-      owner: awx
-      group: awx
+      owner: root
+      group: root
     register: file_results
     become: yes
     delegate_to: localhost
