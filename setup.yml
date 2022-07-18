@@ -40,11 +40,14 @@
       pwd
       ls -al
       echo "CATTING INV File"
-      cat inventory # > crappy-stuff.txt
-      cat inventory > crappy-stuff1.txt
+      cat inventory > /ansible/crappy-stuff.txt
+      echo "LIST DIR CONTENTS NOW.."
+      ls -al /ansible
+      #      cat inventory > /ansible/aap-setup/crappy-stuff1.txt
+      echo "PRESENT WORKING DIR"
       pwd
-      echo "Getting /ansible/aap-setup/ contents now"
-      ls -al /ansible/aap-setup
+      #      echo "Getting /ansible/aap-setup/ contents now"
+      #      ls -al /ansible/aap-setup
     register: command_output
     delegate_to: localhost
 
