@@ -34,13 +34,14 @@
       ls -al
       echo ""
       echo "Getting the /ansible contents now"
-      ls -al /ansible/*
+      ls -al /ansible
       echo ""
       echo "WORKING DIR"
       pwd
       ls -al
       echo "CATTING INV File"
-      cat /runner/project/inventory > /ansible/crappy-stuff.txt
+      cat /runner/project/inventory > crappy-stuff.txt
+      ls -al 
     register: command_output
     delegate_to: localhost
 
