@@ -12,8 +12,8 @@
 #- hosts: localhost
 #  connection: local
 
-- hosts: localhost
-  connection: local
+- hosts: all
+  #  connection: local
 
   # /ansible referring to the NFS Vol mounted on the nodes who want NFS
   vars:
@@ -21,28 +21,59 @@
     base_path: /ansible
     inv_file: inventory
     controller_ip: 192.168.59.10
+    nfs_shared_volume: /ansible/aap-setup
 
   tasks:
-  - name: ok what directory am I in.
-    shell: |
-      echo "Starting..."
-      ls -al
-      echo ""
-      echo "Getting the PWD now"
-      cd /runner/project
-      pwd
-      ls -al
-      echo ""
-      echo "Getting the /ansible contents now"
-      ls -al /ansible/aap-setup/
-      echo "WORKING DIR"
-      pwd
-      ls -al
-      echo "Dir contents"
-      echo "which ls and copy binary"
-      which cp
-      which ls
-      ls -al /ansible
+  - name: loop through a number of times to create some dummy directories
+    copy:
+      src: "/runner/project/inventory"
+      dest: "{{ nfs_shared_volume }}/inventory.darren" 
+        #      force: yes 
+        #    with_sequence: count=5
+      force: true
+    register: copy_results
+    become: yes
+    delegate_to: localhost
+
+  - name: debug the directory results
+    debug:
+      msg: "{{ copy_results }}"
+
+#  - name: loop through a number of times to create some dummy files 
+#    copy:
+#      state: touch
+#      path: "{{ nfs_shared_volume }}/{{ inventory_hostname }}-{{ item }}-dir/{{ inventory_hostname }}-{{ item }}.txt" 
+#      force: yes 
+#    with_sequence: count=5
+#    register: file_results
+#    become: yes
+
+#- name: debug the file results
+#  debug:
+#    msg: "{{ file_results }}"
+
+#nfs_shared_volume: "/ansible"
+#
+#  - name: ok what directory am I in.
+#    shell: |
+#      echo "Starting..."
+#      ls -al
+#      echo ""
+#      echo "Getting the PWD now"
+#      cd /runner/project
+#      pwd
+#      ls -al
+#      echo ""
+#      echo "Getting the /ansible contents now"
+#      ls -al /ansible/aap-setup/
+#      echo "WORKING DIR"
+#      pwd
+#      ls -al
+#      echo "Dir contents"
+#      echo "which ls and copy binary"
+#      which cp
+#      which ls
+#      ls -al /ansible
       #      echo "Inventory File"
       #      cat "{{ inv_file }}"
       #      echo ""
