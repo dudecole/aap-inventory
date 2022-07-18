@@ -1,6 +1,10 @@
 ---
 - hosts: localhost
   connection: local
+  vars:
+    nfs_shared_volume: "/ansible"
+    nfs_shared_volume_setup: "/ansible/aap-setup/"
+    nfs_shared_volume_inventory: "/ansible/aap-setup/inventory"
 
   tasks:
   - name: touch some files on the share 
@@ -18,7 +22,7 @@
   - name: loop through a number of times to create some dummy files 
     file:
       state: touch
-      path: "{{ nfs_shared_volume }}/aap-setup/INVENTORY.CRUD.txt" 
+      path: "{{ nfs_shared_volume_setup }}/INVENTORY.CRUD.txt" 
       force: yes 
     register: file_results
     become: yes
