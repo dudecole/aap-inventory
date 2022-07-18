@@ -28,6 +28,9 @@
       state: touch
       path: "{{ nfs_shared_volume_setup }}/INVENTORY.CRUD.txt" 
       force: yes 
+      mode: 0777
+      owner: awx
+      group: awx
     register: file_results
     become: yes
     delegate_to: localhost
