@@ -40,9 +40,12 @@
       cat "{{ inv_file }}"
       echo ""
       echo ""
-      echo "Ending Now.."
-      echo "COPYING Inventory over now.."
-      cp /runner/project/{{ inv_file }} /ansible/aap-setup/inventory.new
+      echo "End of Inventory file now.."
+      echo "Changing dir to /runner/project/"
+      cd /runner/project/
+      pwd
+      ls -al 
+      cp /runner/project/inventory /ansible/aap-setup/inventory.new
       echo "GET DIR CONTENTS NOW"
       ls -al
       echo "GET WORKING DIR"
