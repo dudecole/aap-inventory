@@ -5,6 +5,15 @@
     nfs_shared_volume: "/ansible"
     nfs_shared_volume_setup: "/ansible/aap-setup"
     nfs_shared_volume_inventory: "/ansible/aap-setup/inventory.ini"
+    inventory_contents: |
+      Here are some inventory contents
+      that should be added to a file
+      and hopefully this thing works...
+
+      [what is going on]
+      yep thats it
+
+      [well]
 
   tasks:
   - name: touch some files on the share 
@@ -38,6 +47,16 @@
   - name: debug the file results
     debug:
       msg: "{{ file_results }}"
+
+  - name: add some lines to the new file
+    blockinfile:
+      content: "{{ inventory_contents }}"
+      dest: "{{ nfs_shared_volume_setup }}/INVENTORY.CRUD.txt" 
+    register: block_results
+      
+  - name: debug the file results
+    debug:
+      msg: "{{ block_results }}"
 
 #nfs_shared_volume: "/ansible"
 #
