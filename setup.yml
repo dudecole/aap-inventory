@@ -5,7 +5,7 @@
     nfs_shared_volume: "/ansible"
     nfs_shared_volume_setup: "/ansible/aap-setup"
     nfs_shared_volume_inventory: "/ansible/aap-setup/inventory"
-    inventory_contents: "{{ lookup('file', inventory) }}"
+    inventory_contents: "{{ lookup('file', nfs_shared_volume_inventory) }}"
 
   tasks:
   - name: debug inventory contents
