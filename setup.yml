@@ -5,7 +5,8 @@
     nfs_shared_volume: "/ansible"
     nfs_shared_volume_setup: "/ansible/aap-setup"
     nfs_shared_volume_inventory: "/runner/project/inventory"
-    inventory_contents: "{{ lookup('file', nfs_shared_volume_inventory) }}"
+    inventory_contents: |
+      "{{ lookup('file', nfs_shared_volume_inventory) }}"
 
   tasks:
   - name: debug inventory contents
@@ -47,7 +48,7 @@
   - name: add some lines to the new file
     blockinfile:
       content: "{{ inventory_contents }}"
-      dest: "{{ nfs_shared_volume_setup }}/inventory.ini" 
+      dest: "{{ nfs_shared_volume_setup }}/INVENTORY.CRUD.txt" 
     register: block_results
       
   - name: debug the file results
