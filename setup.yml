@@ -28,16 +28,15 @@
     copy:
       #      src: "/runner/project/inventory"
       content: "SOME CONTENT HERE..."
-      dest: "/ansible/aap-setup/inventory.dude" 
-        #      force: yes 
+      dest: "/ansible/inventory.dude" 
+      force: yes 
         #    with_sequence: count=5
-      force: true
       mode: 0777
       owner: nobody
       group: nobody
     register: copy_results
     become: yes
-    delegate_to: localhost
+      #    delegate_to: localhost
 
   - name: debug the directory results
     debug:
