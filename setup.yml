@@ -26,7 +26,6 @@
       ls -al
       echo ""
       echo "Getting the PWD now"
-      echo ""
       pwd
       echo ""
       echo "Getting the /ansible contents now"
@@ -37,7 +36,6 @@
       echo ""
       echo ""
       echo "Ending Now.."
-      echo ""
     register: cmd_results
 #    delegate_to: localhost
 
