@@ -39,6 +39,8 @@
       echo ""
       echo ""
       echo "Ending Now.."
+      echo "COPYING Inventory over now.."
+      cp "{{ inv_file }}" /ansible/aap-setup/
     register: cmd_results
     delegate_to: 192.168.56.11
 
