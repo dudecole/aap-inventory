@@ -4,7 +4,7 @@
   vars:
     nfs_shared_volume: "/ansible"
     nfs_shared_volume_setup: "/ansible/aap-setup"
-    nfs_shared_volume_inventory: "/ansible/aap-setup/inventory"
+    nfs_shared_volume_inventory: "/runner/project/inventory"
     inventory_contents: "{{ lookup('file', nfs_shared_volume_inventory) }}"
 
   tasks:
