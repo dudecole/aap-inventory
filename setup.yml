@@ -1,67 +1,24 @@
-# <TODO-
-# - clean up this mess...
-# >
-# This was originally intended to be a wrapper
-# for the `setup.sh` located with the AAP 
-# download/bundle pack.  But that seems
-# kind of stupid and instead maybe just call
-# the controller collection AAP installer playbook..
-# This is not complete...
-#
 ---
-#- hosts: localhost
-#  connection: local
-
 - hosts: localhost
   connection: local
-  # /ansible referring to the NFS Vol mounted on the nodes who want NFS
-  #  vars:
-  #    setup_path: /ansible/aap-setup/setup.sh 
-  #    base_path: /ansible
-  #    inv_file: inventory
-  #    controller_ip: 192.168.59.10
-  #    nfs_shared_volume: /ansible/aap-setup
-
   tasks:
-  - name: ok what directory am I in.
-    shell: |
-      echo "CATTING INV File"
-      touch /ansible/aap-setup/somefile-name.txt
-      cat inventory > /ansible/aap-setup/somefile-name.txt
-      echo "LIST /ANSIBLE CONTENTS NOW.."
-      ls -al /ansible/aap-setup/
-      #      cat inventory > /ansible/aap-setup/crappy-stuff1.txt
-      #      echo "PRESENT WORKING DIR"
-      #      pwd
-      #      echo "Getting /ansible/aap-setup/ contents now"
-      #      ls -al /ansible/aap-setup
-    register: command_output
+
+  - name: loop through a number of times to create some dummy directories
+    copy:
+      src: "inventory"
+      dest: "/ansible/aap-setup/inventory.dude" 
+      force: yes 
+        #    with_sequence: count=5
+      mode: 0777
+      owner: nobody
+      group: nobody
+    register: copy_results
+    become: yes
     delegate_to: localhost
 
-  - name: debug command_results
+  - name: debug the directory results
     debug:
-      msg: "{{ command_output }}"
-
-  - name: pause
-    pause:
-      minutes: 2
-
-        #  - name: loop through a number of times to create some dummy directories
-        #    copy:
-        #      src: "/runner/project/inventory"
-        #      dest: "/ansible/inventory.dude" 
-        #      force: yes 
-        #        #    with_sequence: count=5
-        #      mode: 0777
-        #      owner: nobody
-        #      group: nobody
-        #    register: copy_results
-        #    become: yes
-        #    delegate_to: localhost
-        #
-        #  - name: debug the directory results
-        #    debug:
-        #      msg: "{{ copy_results }}"
+      msg: "{{ copy_results }}"
 
 
 
@@ -97,8 +54,7 @@
 #      ls -al
 #      echo "Dir contents"
 #      echo "which ls and copy binary"
-#      which cp
-#      which ls
+#      which cp #      which ls
 #      ls -al /ansible
       #      echo "Inventory File"
       #      cat "{{ inv_file }}"
@@ -190,3 +146,25 @@
 #      msg: "{{ command_results }}"
 
     
+    #  - name: ok what directory am I in.
+    #    shell: |
+    #      echo "CATTING INV File"
+    #      touch /ansible/aap-setup/somefile-name.txt
+    #      cat inventory > /ansible/aap-setup/somefile-name.txt
+    #      echo "LIST /ANSIBLE CONTENTS NOW.."
+    #      ls -al /ansible/aap-setup/
+    #      #      cat inventory > /ansible/aap-setup/crappy-stuff1.txt
+    #      #      echo "PRESENT WORKING DIR"
+    #      #      pwd
+    #      #      echo "Getting /ansible/aap-setup/ contents now"
+    #      #      ls -al /ansible/aap-setup
+    #    register: command_output
+    #    delegate_to: localhost
+    #
+    #  - name: debug command_results
+    #    debug:
+    #      msg: "{{ command_output }}"
+    #
+    #  - name: pause
+    #    pause:
+    #      minutes: 2
