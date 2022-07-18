@@ -34,18 +34,21 @@
       ls -al
       echo ""
       echo "Getting the /ansible contents now"
-      ls -al "{{ base_path }}"
-      echo ""
-      echo "Inventory File"
-      cat "{{ inv_file }}"
-      echo ""
-      echo ""
-      echo "End of Inventory file now.."
-      echo "Changing dir to /runner/project/"
-      cd /runner/project/
+      cd /ansible/aap-setup/
+      echo "WORKING DIR"
       pwd
-      ls -al 
-      cp /runner/project/inventory /ansible/aap-setup/inventory.new
+      ls -al
+      echo "Dir contents"
+      #      echo "Inventory File"
+      #      cat "{{ inv_file }}"
+      #      echo ""
+      #      echo ""
+      #      echo "End of Inventory file now.."
+      #      echo "Changing dir to /runner/project/"
+      #      cd /runner/project/
+      #      pwd
+      #      ls -al 
+      cp  /runner/project/inventory /ansible/aap-setup
       echo "GET DIR CONTENTS NOW"
       ls -al
       echo "GET WORKING DIR"
