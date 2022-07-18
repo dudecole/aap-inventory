@@ -3,7 +3,7 @@
 
   vars:
     nfs_shared_volume_setup: "/ansible/aap-setup"
-    setup_file: "setup.yml"
+    setup_file: "setup.sh"
     setup_path: "{{ nfs_shared_volume_setup }}/{{ setup_file }}"
     runner_inventory: "/runner/project/inventory"
     inventory_file_name: "inventory"
