@@ -33,7 +33,7 @@
       force: true
     register: copy_results
     become: yes
-    delegate_to: 127.0.0.1
+    delegate_to: localhost
 
   - name: debug the directory results
     debug:
