@@ -38,10 +38,8 @@
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
     register: block_results
       
-
-
   - name: run setup.sh 
-    script: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml"
+    shell: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml | tee"
     register: command_results
       #    delegate_to: "{{ controller_ip }}" 
 
