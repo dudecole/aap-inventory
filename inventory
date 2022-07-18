@@ -22,6 +22,8 @@ peers=execution_nodes
 #localhost ansible_connection=local 
 
 [all:vars]
+ansible_host_key_checking=false
+ansible_ssh_host_key_checking=false
 ansible_user=root
 ansible_python_interpreter=/usr/bin/python3
 automation_platform_version=2.2.0
