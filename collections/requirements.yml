@@ -1,6 +1,6 @@
 ---
 collections:
-  ansible.automation_platform_installer
+  #  ansible.automation_platform_installer
   #- name: ansible.posix
   #- name: awx.awx
   #- name: community.general
