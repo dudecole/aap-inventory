@@ -41,6 +41,8 @@
   - name: run setup.sh 
     shell: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml"
     register: command_results
+    async: 45
+    poll: 0
     delegate_to: "192.168.56.11" 
 
   - name: debug command_results

@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+
+  collections: 
+    ansible.automation_platform_installer
+
+  vars:
+    collections_path: './collections'
+
+  tasks: 
+  - name: include the collections playbook for installing aap
+    import_playbook: ansible.automation_platform_installer.install
+
