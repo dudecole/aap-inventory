@@ -12,7 +12,7 @@
     inventory_contents: |
       "{{ lookup('file', inventory_file_name) }}"
     file_owner: "nobody"
-    group_ownwer: "nobody"
+    group_owner: "nobody"
 
   tasks:
 
