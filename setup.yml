@@ -5,49 +5,47 @@
     nfs_shared_volume_setup: "/ansible/aap-setup"
     setup_file: "setup.sh"
     setup_path: "{{ nfs_shared_volume_setup }}/{{ setup_file }}"
-    runner_inventory: "/runner/project/inventory"
     inventory_file_name: "inventory"
-    inventory_contents: |
-      {{ lookup('file', runner_inventory) }}
     inventory_file_path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}"
+    inventory_contents: "{{ lookup('file', inventory_file_name) }}"
+    setup_node: [execution_node['192.168.56.11']]
+    inventory_contents: |
+      "{{ lookup('file', inventory_file_name) }}"
+    file_owner: "nobody"
+    group_ownwer: "nobody"
 
   tasks:
-  - name: debug inventory contents
-    debug:
-      msg: "{{ inventory_contents }}"
 
-  - name: loop through a number of times to create some dummy files 
+  - name: Create the inventory file on NFS drive 
     file:
       state: touch
       path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       force: yes 
       mode: 0777
-      owner: root
-      group: root
+      owner: "{{ file_owner }}"
+      group: "{{ group_owner }}"
     register: file_results
     become: yes
       #    delegate_to: localhost
 
-  - name: debug the file results
-    debug:
-      msg: "{{ file_results }}"
-
-  - name: add some lines to the new file
+  - name: add inventory contents to the new file
     blockinfile:
       content: "{{ inventory_contents }}"
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
     register: block_results
       
-  - name: run setup.sh 
-    shell: "{{ setup_path }} -i {{ inventory_file_path }} -- -vvv -e @{{ nfs_shared_volume_setup }}/creds.yml"
-    register: command_results
-    async: 45
-    poll: 0
-    delegate_to: "192.168.56.11" 
-
-  - name: debug command_results
-    debug:
-      msg: "{{ command_results }}"
+#  - name: run setup.sh and include new inventory file
+#    shell: > 
+#      {{ setup_path }} -i {{ inventory_file_path }} -- 
+#      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+#    register: command_results
+#    async: 3600
+#    poll: 60
+#    delegate_to: setup_node
+#
+#  - name: debug command_results
+#    debug:
+#      msg: "{{ command_results }}"
 
 
 ########################        

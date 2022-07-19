@@ -19,7 +19,6 @@ peers=execution_nodes
 #192.168.56.200
 
 [all]
-#localhost ansible_connection=local 
 
 [all:vars]
 ansible_host_key_checking=false
