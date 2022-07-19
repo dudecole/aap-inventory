@@ -8,7 +8,7 @@
     inventory_file_name: "inventory"
     inventory_file_path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
-    setup_node: [execution_node['192.168.56.11']]
+    setup_node: '192.168.56.11'
     inventory_contents: |
       "{{ lookup('file', inventory_file_name) }}"
     file_owner: "nobody"
