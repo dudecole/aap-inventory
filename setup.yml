@@ -30,14 +30,14 @@
 
   - name: add inventory contents to the new file
     copy:
-      content: "{{ inventory_contents }}"
+      content: '{{ inventory_contents }}'
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       mode: 0777
       owner: "{{ file_owner }}"
       group: "{{ group_owner }}"
     register: block_results
     become: yes
-    delegate_to: "{{ setup_node }}"
+    delegate_to: localhost #"{{ setup_node }}"
       
 #  - name: run setup.sh and include new inventory file
 #    shell: > 
