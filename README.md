@@ -1,6 +1,15 @@
 Red Hat Ansible Automation Platform Deployment
 ==============================================
 
+## Source
+<TODO: interesting how the formatting works
+on this..--dcole
+
+Yes, I have taken this from the my brain and 
+actually made something of it..  This comment 
+needs to be removed as this is just a test.
+>
+
 ## Inventory Repository
 This is the main AAP inventory and can be used
 for other inventories.  This should be auto-imported
