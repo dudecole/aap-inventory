@@ -37,6 +37,7 @@
       group: "{{ group_owner }}"
     register: block_results
     become: yes
+    delegate_to: "{{ setup_node }}"
       
 #  - name: run setup.sh and include new inventory file
 #    shell: > 
