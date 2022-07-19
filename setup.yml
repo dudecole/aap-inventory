@@ -16,23 +16,27 @@
 
   tasks:
 
-  - name: Create the inventory file on NFS drive 
-    file:
-      state: touch
-      path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
-      force: yes 
+#  - name: Create the inventory file on NFS drive 
+#    file:
+#      state: touch
+#      path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
+#      force: yes 
+#      mode: 0777
+#      owner: "{{ file_owner }}"
+#      group: "{{ group_owner }}"
+#    register: file_results
+#    become: yes
+#      #    delegate_to: localhost
+
+  - name: add inventory contents to the new file
+    copy:
+      content: "{{ inventory_contents }}"
+      dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       mode: 0777
       owner: "{{ file_owner }}"
       group: "{{ group_owner }}"
-    register: file_results
-    become: yes
-      #    delegate_to: localhost
-
-  - name: add inventory contents to the new file
-    blockinfile:
-      content: "{{ inventory_contents }}"
-      dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
     register: block_results
+    become: yes
       
 #  - name: run setup.sh and include new inventory file
 #    shell: > 
