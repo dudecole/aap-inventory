@@ -4,7 +4,7 @@
 192.168.56.11 node_type=execution
 
 [automationcontroller]
-192.168.59.10 node_type=hybrid
+192.168.59.10 node_type=control
 #192.168.59.11
 [automationcontroller:vars]
 peers=execution_nodes
