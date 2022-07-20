@@ -25,23 +25,23 @@
       group: "{{ group_owner }}"
     register: block_results
     become: yes
-      #    delegate_to: localhost #"{{ setup_node }}"
+      #    delegate_to: "{{ setup_node }}"
 
 #Next Play
-- hosts: all
-  tasks:
-  - name: run setup.sh and include new inventory file
-    shell: > 
-      {{ setup_path }} -i {{ inventory_file_path }} -- 
-      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
-    register: command_results
-    async: 3600
-    poll: 60
-    delegate_to: setup_node
-
-  - name: debug command_results
-    debug:
-      msg: "{{ command_results }}"
+#- hosts: all
+#  tasks:
+#  - name: run setup.sh and include new inventory file
+#    shell: > 
+#      {{ setup_path }} -i {{ inventory_file_path }} -- 
+#      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+#    register: command_results
+#    async: 3600
+#    poll: 60
+#    delegate_to: setup_node
+#
+#  - name: debug command_results
+#    debug:
+#      msg: "{{ command_results }}"
 
 
 ########################        
