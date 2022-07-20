@@ -40,7 +40,7 @@
       echo "HOSTNAME"
       hostname
     register: shell_results
-    delegate_to: "{{ setup_node }}"
+      #    delegate_to: "{{ setup_node }}"
 
       
 
