@@ -27,17 +27,14 @@
     become: yes
     delegate_to: "{{ setup_node }}"
 
-  - name: echo PWD, hostname, and info about the localhost
-    shell: |
-      echo "PRESENT WORKING DIR"
-      pwd
-      echo "List DIR"
-      ls -al 
-      echo "HOSTNAME"
-      hostname
-    register: shell_results
-      #    delegate_to: "{{ setup_node }}"
-
+  - name: run setup.sh and include new inventory file
+    shell: > 
+      {{ setup_path }} -i {{ inventory_file_path }} -- 
+      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+    register: command_results
+    async: 3600
+    poll: 60
+    delegate_to: "{{ setup_node }}"
       
 
 #Next Play
