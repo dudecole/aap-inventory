@@ -19,7 +19,7 @@
   - name: debug the first node in the groups[execution_nodes]
     debug:
       msg: "{{ setup_node }}"
-    run_once:
+    run_once: true
 
   - name: add inventory contents to the new file
     copy:
@@ -29,6 +29,7 @@
       owner: "{{ file_owner }}"
       group: "{{ group_owner }}"
     register: block_results
+    run_once: true
     become: yes
     delegate_to: "{{ setup_node }}" #"{{ groups['execution_nodes'][0] }}"
 
