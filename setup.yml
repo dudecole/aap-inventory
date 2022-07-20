@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: all
 
   vars:
     nfs_shared_volume_setup: "/ansible/aap-setup"
@@ -29,7 +29,11 @@
       group: "root" #"{{ group_owner }}"
     register: block_results
     become: yes
-      #    delegate_to: "{{ setup_node }}"
+    delegate_to: "{{ setup_node }}"
+      
+  - name: debug contents of 'block_results'
+    debug:
+      msg: "{{ block_results }}"
 
 #Next Play
 #- hosts: all
