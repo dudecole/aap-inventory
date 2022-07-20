@@ -9,13 +9,17 @@
     inventory_file_name: "inventory"
     inventory_file_path: "{{ runner_path }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
-    setup_node: '192.168.56.12'
+    setup_node: "{{ groups['execution_nodes'][0] }}"
     my_contents: >-
          {{ lookup('file', inventory_file_path) }}
     file_owner: "nobody"
     group_owner: "nobody"
 
   tasks:
+  - name: debug the first node in the groups[execution_nodes]
+    debug:
+      msg: "{{ setup_node }}"
+
   - name: add inventory contents to the new file
     copy:
       content: "{{ my_contents }}"
@@ -25,7 +29,8 @@
       group: "{{ group_owner }}"
     register: block_results
     become: yes
-    delegate_to: "{{ setup_node }}"
+    run_once: true
+      #    delegate_to: "{{ setup_node }}"
 
   - name: run setup.sh and include new inventory file
     shell: > 
