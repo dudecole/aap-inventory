@@ -9,7 +9,7 @@
     inventory_file_name: "inventory"
     inventory_file_path: "{{ runner_path }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
-    setup_node: '192.168.56.11'
+    setup_node: '192.168.56.12'
     my_contents: >-
          {{ lookup('file', inventory_file_path) }}
     file_owner: "nobody"
