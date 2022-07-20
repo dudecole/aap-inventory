@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
 
   vars:
     nfs_shared_volume_setup: "/ansible/aap-setup"
@@ -15,19 +15,6 @@
     group_owner: "nobody"
 
   tasks:
-
-#  - name: Create the inventory file on NFS drive 
-#    file:
-#      state: touch
-#      path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
-#      force: yes 
-#      mode: 0777
-#      owner: "{{ file_owner }}"
-#      group: "{{ group_owner }}"
-#    register: file_results
-#    become: yes
-#      #    delegate_to: localhost
-
   - name: add inventory contents to the new file
     copy:
       content: '{{ inventory_contents }}'
@@ -38,7 +25,9 @@
     register: block_results
     become: yes
     delegate_to: localhost #"{{ setup_node }}"
-      
+
+#Next Play
+- hosts: all
 #  - name: run setup.sh and include new inventory file
 #    shell: > 
 #      {{ setup_path }} -i {{ inventory_file_path }} -- 
