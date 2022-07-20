@@ -3,10 +3,11 @@
 
   vars:
     nfs_shared_volume_setup: "/ansible/aap-setup"
+    runner_path: "/runner/project"
     setup_file: "setup.sh"
     setup_path: "{{ nfs_shared_volume_setup }}/{{ setup_file }}"
     inventory_file_name: "inventory"
-    inventory_file_path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}"
+    inventory_file_path: "{{ runner_path }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
     setup_node: '192.168.56.11'
     inventory_contents: >-
