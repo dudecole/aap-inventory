@@ -29,8 +29,8 @@
 
   - name: run setup.sh and include new inventory file
     shell: > 
-      {{ setup_path }} -i {{ inventory_file_path }} -- 
-      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+      {{ setup_path }} -i /ansible/aap-setup/inventory 
+      -- -v -e @{{ nfs_shared_volume_setup }}/creds.yml
     register: command_results
     async: 3600
     poll: 60
