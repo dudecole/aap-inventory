@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
 
   vars:
     nfs_shared_volume_setup: "/ansible/aap-setup"
