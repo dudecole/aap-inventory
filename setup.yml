@@ -9,7 +9,7 @@
     inventory_file_name: "inventory"
     inventory_file_path: "{{ runner_path }}/{{ inventory_file_name }}"
       #    inventory_contents: "{{ lookup('file', inventory_file_name) }}"
-    setup_node: "192.168.56.11"  #"{{ groups['execution_nodes'][0] }}"
+    setup_node: "{{ groups['execution_nodes'][0] }}"
     my_contents: >-
          {{ lookup('file', inventory_file_path) }}
     file_owner: "nobody"
@@ -19,22 +19,23 @@
   - name: debug the first node in the groups[execution_nodes]
     debug:
       msg: "{{ setup_node }}"
+    delegate_to: "{{ setup_node }}"
 
   - name: pause to see wtf is going on
     pause:
       minutes: 5
 
-        #  - name: add inventory contents to the new file
-        #    copy:
-        #      content: "{{ my_contents }}"
-        #      dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
-        #      mode: 0777
-        #      owner: "{{ file_owner }}"
-        #      group: "{{ group_owner }}"
-        #    register: block_results
-        #    become: yes
-        #    run_once: true
-        #    delegate_to: "{{ groups['execution_nodes'][0] }}"
+  - name: add inventory contents to the new file
+    copy:
+      content: "{{ my_contents }}"
+      dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
+      mode: 0777
+      owner: "{{ file_owner }}"
+      group: "{{ group_owner }}"
+    register: block_results
+    become: yes
+    run_once: true
+    delegate_to: "{{ setup_node }}" #"{{ groups['execution_nodes'][0] }}"
 
       #  - name: run setup.sh and include new inventory file
       #    shell: > 
