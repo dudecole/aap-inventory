@@ -30,6 +30,11 @@
     register: block_results
     become: yes
     run_once: true
+
+  - name: pause so we can look at the container
+    pause:
+      minutes: 5
+
       #    delegate_to: "{{ setup_node }}"
 
       #  - name: run setup.sh and include new inventory file
