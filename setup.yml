@@ -24,27 +24,22 @@
     copy:
       content: "{{ my_contents }}"
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
-      mode: 0777
-      owner: "{{ file_owner }}"
-      group: "{{ group_owner }}"
+        #      mode: 0777
+        #      owner: "{{ file_owner }}"
+        #      group: "{{ group_owner }}"
     register: block_results
     become: yes
     run_once: true
 
-  - name: pause so we can look at the container
-    pause:
-      minutes: 5
-
-      #    delegate_to: "{{ setup_node }}"
-
-      #  - name: run setup.sh and include new inventory file
-      #    shell: > 
-      #      {{ setup_path }} -i /ansible/aap-setup/inventory 
-      #      -- -v -e @{{ nfs_shared_volume_setup }}/creds.yml
-      #    register: command_results
-      #    async: 3600
-      #    poll: 60
-      #    delegate_to: "{{ setup_node }}"
+  - name: run setup.sh and include new inventory file
+    shell: > 
+      {{ setup_path }} -i /ansible/aap-setup/inventory 
+      -- -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+    register: command_results
+    async: 3600
+    poll: 60
+    run_once: true
+    delegate_to: "{{ setup_node }}"
       
 
 #Next Play
