@@ -25,8 +25,8 @@
       content: "{{ my_contents }}"
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       mode: 0777
-      owner: "root" #"{{ file_owner }}"
-      group: "root" #"{{ group_owner }}"
+      owner: "{{ file_owner }}"
+      group: "{{ group_owner }}"
     register: block_results
     become: yes
     delegate_to: "{{ setup_node }}"
