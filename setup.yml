@@ -10,19 +10,19 @@
     inventory_file_path: "{{ runner_path }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
     setup_node: '192.168.56.11'
-    inventory_contents: >-
-         {{ lookup('file', inventory_file_name) }}
+    my_contents: >-
+         {{ lookup('file', inventory_file_path) }}
     file_owner: "nobody"
     group_owner: "nobody"
 
   tasks:
   - name: add inventory contents to the new file
     copy:
-      content: "{{ inventory_contents }}"
+      content: "{{ my_contents }}"
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       mode: 0777
-      owner: "{{ file_owner }}"
-      group: "{{ group_owner }}"
+      owner: "root" #"{{ file_owner }}"
+      group: "root" #"{{ group_owner }}"
     register: block_results
     become: yes
       #    delegate_to: "{{ setup_node }}"
