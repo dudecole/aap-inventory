@@ -1,7 +1,7 @@
 [execution_nodes]
-#192.168.56.12 node_type=execution 
-#192.168.56.13 node_type=hop
 192.168.56.11 node_type=execution
+192.168.56.12 node_type=execution 
+#192.168.56.13 node_type=hop
 
 [automationcontroller]
 192.168.59.10 node_type=control
@@ -13,6 +13,7 @@ peers=execution_nodes
 192.168.59.50
 
 [nfs]
+#execution_nodes[0]
 192.168.56.11
 
 #[ldap]
