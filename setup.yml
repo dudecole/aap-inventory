@@ -16,6 +16,10 @@
     group_owner: "nobody"
 
   tasks:
+  - name: debug contents of 'my_contents'
+    debug:
+      msg: "{{ my_contents }}"
+
   - name: add inventory contents to the new file
     copy:
       content: "{{ my_contents }}"
