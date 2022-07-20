@@ -19,11 +19,7 @@
   - name: debug the first node in the groups[execution_nodes]
     debug:
       msg: "{{ setup_node }}"
-    delegate_to: "{{ setup_node }}"
-
-  - name: pause to see wtf is going on
-    pause:
-      minutes: 5
+    run_once:
 
   - name: add inventory contents to the new file
     copy:
@@ -36,6 +32,10 @@
     become: yes
     run_once: true
     delegate_to: "{{ setup_node }}" #"{{ groups['execution_nodes'][0] }}"
+
+  - name: pause to see wtf is going on
+    pause:
+      minutes: 5
 
       #  - name: run setup.sh and include new inventory file
       #    shell: > 
