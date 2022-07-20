@@ -2,44 +2,46 @@
 - hosts: localhost
 
   vars:
-    nfs_shared_volume_setup: "/ansible/aap-setup"
+    ansible_become_password: "8Mya@nal33182021"
+    nfs_shared_volume_setup: "/Users/darrencole/develop/nfs/aap-setup" #"/ansible/aap-setup"
     setup_file: "setup.sh"
     setup_path: "{{ nfs_shared_volume_setup }}/{{ setup_file }}"
     inventory_file_name: "inventory"
     inventory_file_path: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}"
     inventory_contents: "{{ lookup('file', inventory_file_name) }}"
     setup_node: '192.168.56.11'
-    inventory_contents: |
-      "{{ lookup('file', inventory_file_name) }}"
+    inventory_contents: >-
+         {{ lookup('file', inventory_file_name) }}
     file_owner: "nobody"
     group_owner: "nobody"
 
   tasks:
   - name: add inventory contents to the new file
     copy:
-      content: '{{ inventory_contents }}'
+      content: "{{ inventory_contents }}"
       dest: "{{ nfs_shared_volume_setup }}/{{ inventory_file_name }}" 
       mode: 0777
       owner: "{{ file_owner }}"
       group: "{{ group_owner }}"
     register: block_results
     become: yes
-    delegate_to: localhost #"{{ setup_node }}"
+      #    delegate_to: localhost #"{{ setup_node }}"
 
 #Next Play
 - hosts: all
-#  - name: run setup.sh and include new inventory file
-#    shell: > 
-#      {{ setup_path }} -i {{ inventory_file_path }} -- 
-#      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
-#    register: command_results
-#    async: 3600
-#    poll: 60
-#    delegate_to: setup_node
-#
-#  - name: debug command_results
-#    debug:
-#      msg: "{{ command_results }}"
+  tasks:
+  - name: run setup.sh and include new inventory file
+    shell: > 
+      {{ setup_path }} -i {{ inventory_file_path }} -- 
+      -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+    register: command_results
+    async: 3600
+    poll: 60
+    delegate_to: setup_node
+
+  - name: debug command_results
+    debug:
+      msg: "{{ command_results }}"
 
 
 ########################        
