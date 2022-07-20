@@ -26,10 +26,6 @@
     register: block_results
     become: yes
     delegate_to: "{{ setup_node }}"
-      
-  - name: debug contents of 'block_results'
-    debug:
-      msg: "{{ block_results }}"
 
   - name: echo PWD, hostname, and info about the localhost
     shell: |
