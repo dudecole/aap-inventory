@@ -16,10 +16,6 @@
     group_owner: "nobody"
 
   tasks:
-  - name: debug contents of 'my_contents'
-    debug:
-      msg: "{{ my_contents }}"
-
   - name: add inventory contents to the new file
     copy:
       content: "{{ my_contents }}"
@@ -34,6 +30,19 @@
   - name: debug contents of 'block_results'
     debug:
       msg: "{{ block_results }}"
+
+  - name: echo PWD, hostname, and info about the localhost
+    shell: |
+      echo "PRESENT WORKING DIR"
+      pwd
+      echo "List DIR"
+      ls -al 
+      echo "HOSTNAME"
+      hostname
+    register: shell_results
+    delegate_to: "{{ setup_node }}"
+
+      
 
 #Next Play
 #- hosts: all
