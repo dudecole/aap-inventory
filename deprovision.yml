@@ -25,6 +25,7 @@
             url: "{{ controller_api_base }}/api/v2/instance_groups"
           register: instance_groups
           become: false
+          validate_certs: False         
           changed_when: False
 
         - name: get instance group instances
@@ -32,6 +33,7 @@
             url: "{{ controller_api_base }}{{ item['related']['instances'] }}"
           register: response
           changed_when: False
+          validate_certs: False         
           loop: "{{ instance_groups.json.results }}"
 
         - name: set facts for configured instances
@@ -44,26 +46,30 @@
 
         - name: set fact for each instance in instance instance_groups
           set_fact:
-            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten | map('inventory_hostname', hostvars) | list }}"
+            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten }}" # | map('inventory_hostname', hostvars) | list }}"
 
-        - name: determine differences
-          set_fact:
-            inventory_only_instances: "{{ inventory_instances | difference(controller_instances) }}"
-            controller_only_instances: "{{ controller_instances | difference(inventory_instances) }}"
+        - name: debug inventory_instances
+          debug:
+            msg: "{{ inventory_instances }}"
 
-        - name: deprovision instances not in inventory
-          shell: "awx-manage deprovision_instance --hostname={{ item }}"
-          loop: "{{controller_only_instances}}"
-          delegate_to: "{{controller_host}}"
-          become: true
-          when: not ansible_check_mode
-
-      check_mode: no
-      module_defaults:
-        uri:
-          method: GET
-          user: "{{ controller_api_user }}"
-          password: "{{ controller_api_password }}"
-          validate_certs: False
-          status_code: [ 200, 201 ]
-          force_basic_auth: yes
+#        - name: determine differences
+#          set_fact:
+#            inventory_only_instances: "{{ inventory_instances | difference(controller_instances) }}"
+#            controller_only_instances: "{{ controller_instances | difference(inventory_instances) }}"
+#
+#        - name: deprovision instances not in inventory
+#          shell: "awx-manage deprovision_instance --hostname={{ item }}"
+#          loop: "{{controller_only_instances}}"
+#          delegate_to: "{{controller_host}}"
+#          become: true
+#          when: not ansible_check_mode
+#
+#      check_mode: no
+#      module_defaults:
+#        uri:
+#          method: GET
+#          user: "{{ controller_api_user }}"
+#          password: "{{ controller_api_password }}"
+#          validate_certs: False
+#          status_code: [ 200, 201 ]
+#          force_basic_auth: yes
