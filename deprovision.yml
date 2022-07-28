@@ -1,9 +1,14 @@
-
+## TODO:
+#- fix the include_vars portion, probably 'exposing paths'
+#  is what will do it..
+#-
 ---
 - hosts: localhost
   become: false
   gather_facts: no
 
+  vars_files:
+    - '{{ playbook_dir }}/vars/creds.yml'
 
   vars:
     controller_host: "{{ groups['automationcontroller'][0] }}"
