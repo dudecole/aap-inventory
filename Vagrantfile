@@ -203,18 +203,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "execnode3" do |execnode3|
-#    execnode3.vm.box = "generic/rhel8"
-    execnode3.vm.box = "gusztavvargadr/windows-10"
-    execnode3.vm.hostname = "execnode3"
-#    execnode3.vm.provision "shell", inline: $controller_config
-    execnode3.vm.network "private_network" , ip: "192.168.56.13" 
-#    execnode3.vm.synced_folder '.', '/vagrant', disabled: true
-    config.vm.provider "virtualbox" do |execnodem3|
-        execnodem3.memory = 4096
-        execnodem3.cpus = 2
-    end
-  end
+#  config.vm.define "execnode3" do |execnode3|
+##    execnode3.vm.box = "generic/rhel8"
+#    execnode3.vm.box = "gusztavvargadr/windows-10"
+#    execnode3.vm.hostname = "execnode3"
+##    execnode3.vm.provision "shell", inline: $controller_config
+#    execnode3.vm.network "private_network" , ip: "192.168.56.13" 
+##    execnode3.vm.synced_folder '.', '/vagrant', disabled: true
+#    config.vm.provider "virtualbox" do |execnodem3|
+#        execnodem3.memory = 4096
+#        execnodem3.cpus = 2
+#    end
+#  end
 
   config.vm.define "autohub" do |autohub|
     autohub.vm.box = "generic/rhel8"
