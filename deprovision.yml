@@ -12,7 +12,7 @@
 ---
 - hosts: localhost
   become: false
-    #  connection: local
+  connection: local
   gather_facts: no
 
   vars_files:
@@ -27,7 +27,7 @@
     controller_verify_ssl: False
     basic_auth: yes
     validate_certs: false
-    controller_hostname: "{{ groups['automationcontroller'][0] }}"
+    controller_hostname: 192.168.69.10 #"{{ groups['automationcontroller'][0] }}"
     #controller_api_user: admin
     #controller_protocol: "https"
 
@@ -91,9 +91,8 @@
           - "execution_only_instances: {{ execution_only_instances }}"
 
       - name: deprovision instances not in inventory
-        command: "awx-manage deprovision_instance --hostname={{ item }}"
-        loop: "{{ execution_only_instances }}"
+        command: "awx-manage deprovision_instance --hostname=192.168.59.12" #{{ item }}"
+#        loop: "{{ execution_only_instances }}"
         delegate_to: "{{ controller_hostname }}"
         become: true
-        when: not ansible_check_mode
 
