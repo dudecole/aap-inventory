@@ -12,7 +12,7 @@
 ---
 - hosts: localhost
   become: false
-  connection: local
+    #  connection: local
   gather_facts: no
 
   vars_files:
@@ -91,7 +91,7 @@
           - "execution_only_instances: {{ execution_only_instances }}"
 
       - name: deprovision instances not in inventory
-        command: "/usr/bin/awx-manage deprovision_instance --hostname={{ item }}"
+        command: "awx-manage deprovision_instance --hostname={{ item }}"
         loop: "{{ execution_only_instances }}"
         delegate_to: "{{ controller_hostname }}"
         become: true
