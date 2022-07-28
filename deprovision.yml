@@ -91,7 +91,7 @@
           - "execution_only_instances: {{ execution_only_instances }}"
 
       - name: deprovision instances not in inventory
-        command: "awx-manage deprovision_instance --hostname=192.168.59.12" #{{ item }}"
+        shell: "awx-manage deprovision_instance --hostname=192.168.59.12" #{{ item }}"
 #        loop: "{{ execution_only_instances }}"
         delegate_to: "{{ controller_hostname }}"
         become: true
