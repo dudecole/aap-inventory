@@ -4,6 +4,7 @@
   become: false
   gather_facts: no
 
+
   vars:
     controller_host: "{{ groups['automationcontroller'][0] }}"
     controller_api_user: admin
@@ -12,7 +13,7 @@
   tasks:
     - name: including the creds.yml file 
       include_vars:
-        name: creds.yml
+        name: vars/creds.yml
 
     - block:
         - set_fact:
