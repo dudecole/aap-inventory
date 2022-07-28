@@ -1,4 +1,4 @@
 ansible-core
-#awxkit
+awxkit
 ansible-navigator
 
