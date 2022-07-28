@@ -20,37 +20,48 @@
         - set_fact:
             controller_api_base: "{{ controller_protocol }}://{{ controller_host }}"
 
-        - name: get instance groups (excluding isolated)
+        - name: auth please... 
           uri:
-            url: "{{ controller_api_base }}/api/v2/instance_groups"
+            url: "{{ controller_api_base }}/api/login"
             validate_certs: False         
-          register: instance_groups
-          become: false
-          changed_when: False
+            force_basic_auth: True
+            user: "{{ controller_api_user }}"
+            password: "{{ controller_api_password }}" 
+            method: POST
+          register: login_results
+            #          changed_when: False
 
-        - name: get instance group instances
-          uri:
-            url: "{{ controller_api_base }}{{ item['related']['instances'] }}"
-            validate_certs: False         
-          register: response
-          changed_when: False
-          loop: "{{ instance_groups.json.results }}"
-
-        - name: set facts for configured instances
-          set_fact:
-            controller_instances: "{{ response.results | map(attribute='json') | map(attribute='results') | flatten | map(attribute='hostname') | list }}"
-
-        - name: set fact for all instance groups
-          set_fact:
-            inventory_instance_groups: "{{ (groups | select('match', 'instance_group') | list ) + (groups | select('match', 'automationcontroller') | list) }}"
-
-        - name: set fact for each instance in instance instance_groups
-          set_fact:
-            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten }}" # | map('inventory_hostname', hostvars) | list }}"
-
-        - name: debug inventory_instances
-          debug:
-            msg: "{{ inventory_instances }}"
+            #        - name: get instance groups (excluding isolated)
+            #          uri:
+            #            url: "{{ controller_api_base }}/api/v2/instance_groups"
+            #            validate_certs: False         
+            #          register: instance_groups
+            #          become: false
+            #          changed_when: False
+            #
+            #        - name: get instance group instances
+            #          uri:
+            #            url: "{{ controller_api_base }}{{ item['related']['instances'] }}"
+            #            validate_certs: False         
+            #          register: response
+            #          changed_when: False
+            #          loop: "{{ instance_groups.json.results }}"
+            #
+            #        - name: set facts for configured instances
+            #          set_fact:
+            #            controller_instances: "{{ response.results | map(attribute='json') | map(attribute='results') | flatten | map(attribute='hostname') | list }}"
+            #
+            #        - name: set fact for all instance groups
+            #          set_fact:
+            #            inventory_instance_groups: "{{ (groups | select('match', 'instance_group') | list ) + (groups | select('match', 'automationcontroller') | list) }}"
+            #
+            #        - name: set fact for each instance in instance instance_groups
+            #          set_fact:
+            #            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten }}" # | map('inventory_hostname', hostvars) | list }}"
+            #
+            #        - name: debug inventory_instances
+            #          debug:
+            #            msg: "{{ inventory_instances }}"
 
 #        - name: determine differences
 #          set_fact:
