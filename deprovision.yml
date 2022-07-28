@@ -1,6 +1,6 @@
 #-
 ---
-- hosts: 192.168.59.10
+- hosts: automationcontroller[0]
 #  connection: local
   gather_facts: no
 
@@ -10,76 +10,75 @@
   vars:
     return_codes: [200,201,202]
     controller_validate_certs: false
-    controller_url: https://192.168.59.10
+    controller_hostname: "{{ groups['automationcontroller'][0] }}"
+    controller_url: "https://{{ controller_hostname }}"
     controller_username: "admin"
-    controller_password: <please-encrypt-me>
+    controller_password: using a token from admin user in AAP
     controller_verify_ssl: False
     basic_auth: yes
     validate_certs: false
-    controller_hostname: 192.168.59.10 #"{{ groups['automationcontroller'][0] }}"
-    #controller_api_user: admin
-    #controller_protocol: "https"
+    admin_api_token: "TyuBLGK6NMyIEO3vjuKBsPKIjsH1oU"
 
   tasks:
+    - name: Get instance groups (excluding isolated)
+      uri: 
+        url: "{{ controller_url }}/api/v2/instance_groups?name=default"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ admin_api_token }}"
+          content-Type: application/json
+        force_basic_auth: "{{ basic_auth }}"
+        status_code: "{{ return_codes }}"
+        validate_certs: "{{ validate_certs }}"
+      register: instance_groups 
+
+    - name: get instance group instances
+      uri:
+        url: "{{ controller_url }}{{ item['related']['instances'] }}"
+        method: GET
+        headers:
+          Authorization: "Bearer TyuBLGK6NMyIEO3vjuKBsPKIjsH1oU"
+          content-Type: application/json
+        force_basic_auth: "{{ basic_auth }}"
+        status_code: "{{ return_codes }}"
+        validate_certs: "{{ validate_certs }}"
+      register: response
+      changed_when: False
+      loop: "{{ instance_groups.json.results }}" 
+
+    - name: set facts for configured instances
+      set_fact:
+        execution_nodes: "{{ response.results | map(attribute='json') | map(attribute='results') | flatten | map(attribute='hostname') | list }}"
+
+    - name: set fact for all instance groups
+      set_fact:
+        inventory_instance_groups: "{{ (groups | select('match', 'instance_group') | list ) + (groups | select('match', 'execution_nodes') | list) }}"
+
+    - name: debug inventory_instances
+      debug:
+        msg: "{{ inventory_instance_groups }}"
+
+    - name: set fact for each instance in instance instance_groups
+      set_fact:
+        inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten | map('infer_address', hostvars) | list }}"
+
+    - name: debug inventory_instances
+      debug:
+        msg: "{{ inventory_instances }}"
+
+    - name: determine differences
+      set_fact:
+        inventory_only_instances: "{{ inventory_instances | difference(execution_nodes) }}"
+        execution_only_instances: "{{ execution_nodes | difference(inventory_instances) }}"
+
+    - name: debug inventory_instances
+      debug:
+        msg: 
+        - "inventory_only_instances: {{ inventory_only_instances }}" 
+        - "execution_only_instances: {{ execution_only_instances }}"
+
     #awx-manage deprovision_instance --hostname 192.168.56.12 -v 3
     - name: deprovision instances not in inventory
-      shell: "awx-manage deprovision_instance --hostname 192.168.56.12" #{{ item }}"
-#      loop: "{{ execution_only_instances }}"
-      delegate_to: 192.168.59.10 #"{{ controller_hostname }}"
-
-
-#      - name: Get instance groups (excluding isolated)
-#        uri: 
-#          url: "{{ controller_url }}/api/v2/instance_groups?name=default"
-#          method: GET
-#          headers:
-#            Authorization: "Bearer TyuBLGK6NMyIEO3vjuKBsPKIjsH1oU"
-#            content-Type: application/json
-#          force_basic_auth: "{{ basic_auth }}"
-#          status_code: "{{ return_codes }}"
-#          validate_certs: "false" #{{ validate_certs }}"
-#        register: instance_groups 
-#
-#      - name: get instance group instances
-#        uri:
-#          url: "{{ controller_url }}{{ item['related']['instances'] }}"
-#          method: GET
-#          headers:
-#            Authorization: "Bearer TyuBLGK6NMyIEO3vjuKBsPKIjsH1oU"
-#            content-Type: application/json
-#          force_basic_auth: "{{ basic_auth }}"
-#          status_code: "{{ return_codes }}"
-#          validate_certs: "false" #{{ validate_certs }}"
-#        register: response
-#        changed_when: False
-#        loop: "{{ instance_groups.json.results }}"
-#
-#      - name: set facts for configured instances
-#        set_fact:
-#          execution_nodes: "{{ response.results | map(attribute='json') | map(attribute='results') | flatten | map(attribute='hostname') | list }}"
-#
-#      - name: set fact for all instance groups
-#        set_fact:
-#          inventory_instance_groups: "{{ (groups | select('match', 'instance_group') | list ) + (groups | select('match', 'execution_nodes') | list) }}"
-#
-#      - name: debug inventory_instances
-#        debug:
-#          msg: "{{ inventory_instance_groups }}"
-#
-#      - name: set fact for each instance in instance instance_groups
-#        set_fact:
-#          inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten | map('infer_address', hostvars) | list }}"
-#      - name: debug inventory_instances
-#        debug:
-#          msg: "{{ inventory_instances }}"
-#
-#      - name: determine differences
-#        set_fact:
-#          inventory_only_instances: "{{ inventory_instances | difference(execution_nodes) }}"
-#          execution_only_instances: "{{ execution_nodes | difference(inventory_instances) }}"
-#
-#      - name: debug inventory_instances
-#        debug:
-#          msg: 
-#          - "inventory_only_instances: {{ inventory_only_instances }}" 
-#          - "execution_only_instances: {{ execution_only_instances }}"
+      shell: "awx-manage deprovision_instance --hostname {{ item }}"
+      loop: "{{ execution_only_instances }}"
+      delegate_to: "{{ controller_hostname }}"
