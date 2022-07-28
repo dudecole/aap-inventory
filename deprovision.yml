@@ -18,7 +18,7 @@
   tasks:
     - block:
         - set_fact:
-            controller_api_base: "{{ controller_protocol }}://{{ controller_host | infer_address(hostvars) }}"
+            controller_api_base: "{{ controller_protocol }}://{{ controller_host }}"
 
         - name: get instance groups (excluding isolated)
           uri:
