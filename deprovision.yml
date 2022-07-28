@@ -23,17 +23,17 @@
         - name: get instance groups (excluding isolated)
           uri:
             url: "{{ controller_api_base }}/api/v2/instance_groups"
+            validate_certs: False         
           register: instance_groups
           become: false
-          validate_certs: False         
           changed_when: False
 
         - name: get instance group instances
           uri:
             url: "{{ controller_api_base }}{{ item['related']['instances'] }}"
+            validate_certs: False         
           register: response
           changed_when: False
-          validate_certs: False         
           loop: "{{ instance_groups.json.results }}"
 
         - name: set facts for configured instances
