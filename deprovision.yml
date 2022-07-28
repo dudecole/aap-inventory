@@ -16,10 +16,6 @@
     controller_protocol: "https"
 
   tasks:
-    - name: including the creds.yml file 
-      include_vars:
-        name: vars/creds.yml
-
     - block:
         - set_fact:
             controller_api_base: "{{ controller_protocol }}://{{ controller_host | infer_address(hostvars) }}"
