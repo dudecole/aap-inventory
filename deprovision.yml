@@ -44,7 +44,7 @@
 
         - name: set fact for each instance in instance instance_groups
           set_fact:
-            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten | map('infer_address', hostvars) | list }}"
+            inventory_instances: "{{  inventory_instance_groups | map('extract', groups) | flatten | map('inventory_hostname', hostvars) | list }}"
 
         - name: determine differences
           set_fact:
