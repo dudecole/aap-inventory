@@ -1,6 +1,8 @@
 ---
 collections:
-  - git@github.com:dudecole/ah_configuration.git
+  - source: git@github.com:dudecole/ah_configuration.git
+    name: dudecole.ah_configuration
+
   #- redhat_cop.controller_configuration
   #- servicenow.itsm
   #- servicenow.servicenow
