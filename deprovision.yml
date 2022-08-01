@@ -13,7 +13,7 @@
     controller_hostname: "{{ groups['automationcontroller'][0] }}"
     controller_url: "https://{{ controller_hostname }}"
     controller_username: "admin"
-    controller_password: using a token from admin user in AAP
+      #    controller_password: using a token from admin user in AAP
     controller_verify_ssl: False
     basic_auth: yes
     validate_certs: false
