@@ -1,17 +1,13 @@
 ---
 collections:
 - git@github.com:dudecole/ah_configuration.git
-
-  #- redhat_cop.controller_configuration
-  #- servicenow.itsm
+- redhat_cop.controller_configuration
+- servicenow.itsm
+- community.general
+- community.crypto
+- community.postgresql
   #- servicenow.servicenow
-  #- redhat_cop.controller_configuration
-  #- redhat_cop.ah_configuration
-  #- servicenow.itsm
   #- awx.awx
-  #- community.general
-  #- community.crypto
-  #- community.postgresql
   #  ansible.automation_platform_installer
   #- name: ansible.posix
   #- name: pulp.pulp_installer
