@@ -16,6 +16,13 @@
     group_owner: "nobody"
 
   tasks:
+  - name: what do my registry vars look like.. 
+    debug:
+      msg: 
+        - "{{ registry_username }}"
+        - "{{ registry_password }}"
+    run_once: true
+
   - name: debug the first node in the groups[execution_nodes]
     debug:
       msg: "{{ setup_node }}"
@@ -33,16 +40,16 @@
     become: yes
     delegate_to: "{{ setup_node }}" #"{{ groups['execution_nodes'][0] }}"
 
-  - name: run setup.sh and include new inventory file
-    shell: > 
-      {{ setup_path }} -i /ansible/aap-setup/inventory 
-      -- -v -e @{{ nfs_shared_volume_setup }}/creds.yml
-    register: command_results
-    async: 3600
-    poll: 60
-    run_once: true
-    delegate_to: "{{ setup_node }}"
-    ignore_errors: true
+      #  - name: run setup.sh and include new inventory file
+      #    shell: > 
+      #      {{ setup_path }} -i /ansible/aap-setup/inventory 
+      #      -- -v -e @{{ nfs_shared_volume_setup }}/creds.yml
+      #    register: command_results
+      #    async: 3600
+      #    poll: 60
+      #    run_once: true
+      #    delegate_to: "{{ setup_node }}"
+      #    ignore_errors: true
       
 
 #Next Play
