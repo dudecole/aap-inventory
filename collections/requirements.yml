@@ -1,11 +1,11 @@
 ---
 collections:
-- git@github.com:dudecole/ah_configuration.git
-- redhat_cop.controller_configuration
-- servicenow.itsm
-- community.general
-- community.crypto
-- community.postgresql
+  #- git@github.com:dudecole/ah_configuration.git
+  #- redhat_cop.controller_configuration
+  #- servicenow.itsm
+  #- community.general
+  #- community.crypto
+  #- community.postgresql
   #- servicenow.servicenow
   #- awx.awx
   #  ansible.automation_platform_installer
