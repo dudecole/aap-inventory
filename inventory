@@ -1,6 +1,6 @@
 [execution_nodes]
 192.168.56.11 node_type=execution
-192.168.56.12 node_type=execution 
+#192.168.56.12 node_type=execution 
 #192.168.56.13 node_type=hop
 
 [automationcontroller]
@@ -11,7 +11,7 @@
 peers=execution_nodes
 
 [automationhub]
-192.168.59.50
+#192.168.59.50
 
 [nfs]
 #execution_nodes[0]
@@ -42,8 +42,9 @@ pg_port=5432
 pg_sslmode=prefer
 pg_username=awx
 receptor_listener_port=27199
-registry_url=''
-registry_username=''
+registry_url='registry.redhat.io'
+#registry_password=''
+#registry_username=''
 registry_verify_ssl='false'
 tower_package_name=automation-controller
 tower_package_version=4.2.0
