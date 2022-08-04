@@ -42,6 +42,7 @@
     poll: 60
     run_once: true
     delegate_to: "{{ setup_node }}"
+    ignore_errors: true
       
 
 #Next Play
