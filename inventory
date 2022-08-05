@@ -1,6 +1,6 @@
 [execution_nodes]
 192.168.56.11 node_type=execution
-#192.168.56.12 node_type=execution 
+192.168.56.12 node_type=execution 
 #192.168.56.13 node_type=hop
 
 [automationcontroller]
