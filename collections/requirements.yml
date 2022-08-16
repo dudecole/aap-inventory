@@ -1,7 +1,7 @@
 ---
 collections:
 - name: awx.awx
-  source: "https://galaxy.ansible.com/v2"
+  source: "https://galaxy123.ansible.com"
   #- git@github.com:dudecole/ah_configuration.git
   #- redhat_cop.controller_configuration
   #- servicenow.itsm
