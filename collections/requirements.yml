@@ -1,6 +1,7 @@
 ---
 collections:
-- awx.awx
+- name: awx.awx
+  source: "https://104.26.1.234"
 
   #- git@github.com:dudecole/ah_configuration.git
   #- redhat_cop.controller_configuration
