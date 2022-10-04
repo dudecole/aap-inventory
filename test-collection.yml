@@ -7,5 +7,6 @@
   
   tasks: 
   - name: debug the facts from the playbook in the credentials collection
-    ansible.builtin.include_playbook: dudecole.ansible_creds.debug-creds.yml
+    ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
+
     
