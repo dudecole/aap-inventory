@@ -6,7 +6,7 @@
   
   tasks: 
   - name: debug something..
-    shell: "ls -al collections/"
+    shell: "ls -al"
     register: shell_output
     
   - name: debug shell_output
