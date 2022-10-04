@@ -7,6 +7,11 @@
   tasks: 
   - name: debug something..
     shell: "ls -al"
+    register: shell_output
+    
+  - name: debug shell_output
+    debug:
+      msg: "{{ shell_output }}"
     
   - name: pause for viewing
     pause:
