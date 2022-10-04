@@ -14,7 +14,7 @@
       msg: 
       - "{{ shell_output }}"
       - "{{ playbook_dir }}"
-      - "{{ collections_path }}"
+#       - "{{ collection_path }}"
           
 #   - name: import collection playbook
 #     import_playbook: "{{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/debug-creds"
