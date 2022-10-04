@@ -1,0 +1,11 @@
+---
+- hosts: all
+  connection: local
+  
+  collections: 
+  - dudecole.ansible_creds
+  
+  tasks: 
+  - name: debug the facts from the playbook in the credentials collection
+    import_playbook: dudecole.ansible_creds.debug-creds
+    
