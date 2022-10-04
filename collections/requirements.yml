@@ -1,7 +1,6 @@
 ---
 collections:
-- name: awx.awx
-  source: git@github.com:ansible/awx.git
+- git@github.com:dudecole/aap-credentials.git
 
   #- git@github.com:dudecole/ah_configuration.git
   #- redhat_cop.controller_configuration
