@@ -5,6 +5,13 @@
   - dudecole.ansible_creds
   
   tasks: 
-  - ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
+  - name: debug something..
+    shell: "ls -al"
+    
+  - name: pause for viewing
+    pause:
+      minutes: 5
+      
+  #- ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
 
     
