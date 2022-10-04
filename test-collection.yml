@@ -6,7 +6,7 @@
   
   tasks: 
   - name: debug something..
-    shell: "ls -al {{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/"
+    shell: ls -al '{{ playbook_dir }}/../'
     register: shell_output
     
   - name: debug shell_output
@@ -14,6 +14,7 @@
       msg: 
       - "{{ shell_output }}"
       - "{{ playbook_dir }}"
+      - "{{ collections_path }}"
           
 #   - name: import collection playbook
 #     import_playbook: "{{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/debug-creds"
