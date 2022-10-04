@@ -6,7 +6,7 @@
   
   tasks: 
   - name: debug something..
-    shell: "ls -al"
+    shell: "ls -al {{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/"
     register: shell_output
     
   - name: debug shell_output
@@ -15,12 +15,12 @@
       - "{{ shell_output }}"
       - "{{ playbook_dir }}"
           
-  - name: import collection playbook
-    ansible.builtin.import_playbook: "{{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/debug-creds"
-    register: import_output
+#   - name: import collection playbook
+#     import_playbook: "{{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/debug-creds"
+#     register: import_output
      
-  - name: debug import_output
-    debug:
-      msg: "{{ import_output }}"
+#   - name: debug import_output
+#     debug:
+#       msg: "{{ import_output }}"
 
     
