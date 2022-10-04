@@ -17,9 +17,9 @@
 #       - "{{ collection_path }}"
           
   - name: import collection playbook
-    import_playbook: '{{ playbook_dir }}/../requirements_collections/ansible_collections/dudecole/ansible_creds/debug-creds.yml'
+    ansible.builtin.import_playbook: '{{ playbook_dir }}/../requirements_collections/ansible_collections/dudecole/ansible_creds/debug-creds.yml'
     register: import_output
-     
+
   - name: debug import_output
     debug:
       msg: "{{ import_output }}"
