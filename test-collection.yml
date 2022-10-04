@@ -1,4 +1,10 @@
 ---
-- ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
+- hosts: localhost
+
+  collections: 
+  - dudecole.ansible_creds
+  
+  tasks: 
+  - ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
 
     
