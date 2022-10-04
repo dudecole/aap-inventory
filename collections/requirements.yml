@@ -1,6 +1,7 @@
 ---
 collections:
-- git@github.com:dudecole/aap-credentials.git
+- name: dudecole.ansible_creds
+  source: git@github.com:dudecole/aap-credentials.git
 
   #- git@github.com:dudecole/ah_configuration.git
   #- redhat_cop.controller_configuration
