@@ -11,12 +11,20 @@
     
   - name: debug shell_output
     debug:
-      msg: "{{ shell_output }}"
+      msg: 
+      - "{{ shell_output }}"
+      - "{{ playbook_dir }}"
     
   - name: pause for viewing
     pause:
       minutes: 5
       
-  #- ansible.builtin.import_playbook: dudecole.ansible_creds.debug-creds
+  - name: import collection playbook
+    ansible.builtin.import_playbook: "{{ playbook_dir }}/../requirements_collections/dudecole/ansible_creds/debug-creds }}"
+    register: import_output
+     
+  - name: debug import_output
+    debug:
+      msg: "{{ import_output }}"
 
     
